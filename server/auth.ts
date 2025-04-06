@@ -5,12 +5,11 @@ import session from "express-session";
 import { scrypt, randomBytes, timingSafeEqual } from "crypto";
 import { promisify } from "util";
 import { storage } from "./storage";
-import { User as SelectUser } from "@shared/schema";
-import { z } from "zod";
+import { User } from "@shared/schema";
 
 declare global {
   namespace Express {
-    interface User extends SelectUser {}
+    interface User extends Omit<User, "password"> {}
   }
 }
 
@@ -29,24 +28,16 @@ async function comparePasswords(supplied: string, stored: string) {
   return timingSafeEqual(hashedBuf, suppliedBuf);
 }
 
-// Validation schemas
-const registerSchema = z.object({
-  username: z.string().min(3, "Username must be at least 3 characters"),
-  email: z.string().email("Please enter a valid email"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
-});
-
-const loginSchema = z.object({
-  username: z.string().min(1, "Username is required"),
-  password: z.string().min(1, "Password is required"),
-});
-
 export function setupAuth(app: Express) {
   const sessionSettings: session.SessionOptions = {
-    secret: process.env.SESSION_SECRET || "titan-ai-secret",
+    secret: process.env.SESSION_SECRET || "titan-ai-community-session-secret",
     resave: false,
     saveUninitialized: false,
     store: storage.sessionStore,
+    cookie: {
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
+    }
   };
 
   app.set("trust proxy", 1);
@@ -58,10 +49,12 @@ export function setupAuth(app: Express) {
     new LocalStrategy(async (username, password, done) => {
       try {
         const user = await storage.getUserByUsername(username);
+        
         if (!user || !(await comparePasswords(password, user.password))) {
-          return done(null, false);
+          return done(null, false, { message: "Invalid username or password" });
         } else {
-          return done(null, user);
+          const { password: _, ...userWithoutPassword } = user;
+          return done(null, userWithoutPassword);
         }
       } catch (err) {
         return done(err);
@@ -69,11 +62,18 @@ export function setupAuth(app: Express) {
     }),
   );
 
-  passport.serializeUser((user, done) => done(null, user.id));
+  passport.serializeUser((user: Express.User, done) => done(null, user.id));
+  
   passport.deserializeUser(async (id: number, done) => {
     try {
       const user = await storage.getUser(id);
-      done(null, user);
+      
+      if (!user) {
+        return done(null, false);
+      }
+      
+      const { password: _, ...userWithoutPassword } = user;
+      done(null, userWithoutPassword);
     } catch (err) {
       done(err);
     }
@@ -81,64 +81,52 @@ export function setupAuth(app: Express) {
 
   app.post("/api/register", async (req, res, next) => {
     try {
-      // Validate request body
-      const validatedData = registerSchema.parse(req.body);
+      const { username, email, password } = req.body;
       
-      // Check if username already exists
-      const existingUsername = await storage.getUserByUsername(validatedData.username);
+      // Check if user already exists
+      const existingUsername = await storage.getUserByUsername(username);
       if (existingUsername) {
-        return res.status(400).json({ message: "Username already exists" });
+        return res.status(400).json({ error: "Username already exists" });
+      }
+      
+      const existingEmail = await storage.getUserByEmail(email);
+      if (existingEmail) {
+        return res.status(400).json({ error: "Email already in use" });
       }
       
       // Create user with hashed password
+      const hashedPassword = await hashPassword(password);
       const user = await storage.createUser({
-        ...validatedData,
-        password: await hashPassword(validatedData.password),
-        bio: "",
-        avatarUrl: "",
+        username,
+        email,
+        password: hashedPassword,
+        bio: null,
+        avatarUrl: null
       });
-
-      // Log the user in
-      req.login(user, (err) => {
+      
+      // Remove password from response
+      const { password: _, ...userWithoutPassword } = user;
+      
+      // Log user in
+      req.login(userWithoutPassword, (err) => {
         if (err) return next(err);
-        
-        // Remove password from response
-        const { password, ...safeUser } = user;
-        res.status(201).json(safeUser);
+        res.status(201).json(userWithoutPassword);
       });
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        return res.status(400).json({ message: error.errors[0].message });
-      }
-      next(error);
+    } catch (err) {
+      next(err);
     }
   });
 
   app.post("/api/login", (req, res, next) => {
-    try {
-      // Validate request body
-      loginSchema.parse(req.body);
+    passport.authenticate("local", (err, user, info) => {
+      if (err) return next(err);
+      if (!user) return res.status(401).json({ error: info.message || "Invalid login" });
       
-      passport.authenticate("local", (err, user) => {
+      req.login(user, (err) => {
         if (err) return next(err);
-        if (!user) {
-          return res.status(401).json({ message: "Invalid username or password" });
-        }
-        
-        req.login(user, (err) => {
-          if (err) return next(err);
-          
-          // Remove password from response
-          const { password, ...safeUser } = user;
-          res.status(200).json(safeUser);
-        });
-      })(req, res, next);
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        return res.status(400).json({ message: error.errors[0].message });
-      }
-      next(error);
-    }
+        return res.json(user);
+      });
+    })(req, res, next);
   });
 
   app.post("/api/logout", (req, res, next) => {
@@ -149,10 +137,10 @@ export function setupAuth(app: Express) {
   });
 
   app.get("/api/user", (req, res) => {
-    if (!req.isAuthenticated()) return res.sendStatus(401);
-    
-    // Remove password from response
-    const { password, ...safeUser } = req.user;
-    res.json(safeUser);
+    if (req.isAuthenticated()) {
+      res.json(req.user);
+    } else {
+      res.status(401).json({ error: "Not authenticated" });
+    }
   });
 }

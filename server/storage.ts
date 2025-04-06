@@ -6,9 +6,19 @@ import {
   stats, type Stats
 } from "@shared/schema";
 import session from "express-session";
+import { db } from "./db";
+import { eq, desc } from "drizzle-orm";
+import connectPg from "connect-pg-simple";
+import postgres from "postgres";
 import createMemoryStore from "memorystore";
 
 const MemoryStore = createMemoryStore(session);
+
+const PostgresStore = connectPg(session);
+const pool = {
+  connectionString: process.env.DATABASE_URL,
+  max: 20
+};
 
 // Storage interface
 export interface IStorage {
@@ -42,7 +52,7 @@ export interface IStorage {
   incrementStat(field: keyof Omit<Stats, 'id'>): Promise<Stats>;
   
   // Session store
-  sessionStore: session.SessionStore;
+  sessionStore: any; // Using any to fix type issues with session store
 }
 
 export class MemStorage implements IStorage {
@@ -51,7 +61,7 @@ export class MemStorage implements IStorage {
   private discussions: Map<number, Discussion>;
   private comments: Map<number, Comment>;
   private stats: Stats;
-  public sessionStore: session.SessionStore;
+  public sessionStore: any; // Using any to fix type issues with session store
   
   private userId: number;
   private projectId: number;
@@ -239,4 +249,204 @@ export class MemStorage implements IStorage {
   }
 }
 
-export const storage = new MemStorage();
+export class DatabaseStorage implements IStorage {
+  public sessionStore: any; // Using any to fix type issues with session store
+
+  constructor() {
+    this.sessionStore = new PostgresStore({
+      conObject: pool,
+      createTableIfMissing: true
+    });
+  }
+
+  // Users
+  async getUser(id: number): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.id, id));
+    return user;
+  }
+
+  async getUserByUsername(username: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.username, username));
+    return user;
+  }
+  
+  async getUserByEmail(email: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.email, email));
+    return user;
+  }
+
+  async createUser(insertUser: InsertUser): Promise<User> {
+    const [user] = await db.insert(users).values(insertUser).returning();
+    
+    // Increment active users count
+    await this.incrementStat('activeUsers');
+    
+    return user;
+  }
+  
+  async getAllUsers(): Promise<User[]> {
+    return await db.select().from(users);
+  }
+  
+  // Projects
+  async getProject(id: number): Promise<Project | undefined> {
+    const [project] = await db.select().from(projects).where(eq(projects.id, id));
+    return project;
+  }
+  
+  async createProject(insertProject: InsertProject): Promise<Project> {
+    const [project] = await db.insert(projects).values(insertProject).returning();
+    
+    // Increment project count
+    await this.incrementStat('projectsCreated');
+    
+    return project;
+  }
+  
+  async getAllProjects(): Promise<Project[]> {
+    return await db.select().from(projects);
+  }
+  
+  async getTopProjects(limit: number): Promise<Project[]> {
+    return await db.select().from(projects).orderBy(desc(projects.upvotes)).limit(limit);
+  }
+  
+  async upvoteProject(id: number): Promise<Project> {
+    const [project] = await db.select().from(projects).where(eq(projects.id, id));
+    
+    if (!project) {
+      throw new Error("Project not found");
+    }
+    
+    const currentUpvotes = project.upvotes ?? 0;
+    
+    const [updatedProject] = await db
+      .update(projects)
+      .set({ upvotes: currentUpvotes + 1 })
+      .where(eq(projects.id, id))
+      .returning();
+      
+    return updatedProject;
+  }
+  
+  // Discussions
+  async getDiscussion(id: number): Promise<Discussion | undefined> {
+    const [discussion] = await db.select().from(discussions).where(eq(discussions.id, id));
+    return discussion;
+  }
+  
+  async createDiscussion(insertDiscussion: InsertDiscussion): Promise<Discussion> {
+    const [discussion] = await db.insert(discussions).values(insertDiscussion).returning();
+    
+    // Increment post count
+    await this.incrementStat('communityPosts');
+    
+    return discussion;
+  }
+  
+  async getAllDiscussions(): Promise<Discussion[]> {
+    return await db.select().from(discussions);
+  }
+  
+  async getTopDiscussions(limit: number): Promise<Discussion[]> {
+    return await db.select().from(discussions).orderBy(desc(discussions.upvotes)).limit(limit);
+  }
+  
+  async upvoteDiscussion(id: number): Promise<Discussion> {
+    const [discussion] = await db.select().from(discussions).where(eq(discussions.id, id));
+    
+    if (!discussion) {
+      throw new Error("Discussion not found");
+    }
+    
+    const currentUpvotes = discussion.upvotes ?? 0;
+    
+    const [updatedDiscussion] = await db
+      .update(discussions)
+      .set({ upvotes: currentUpvotes + 1 })
+      .where(eq(discussions.id, id))
+      .returning();
+      
+    return updatedDiscussion;
+  }
+  
+  // Comments
+  async createComment(insertComment: InsertComment): Promise<Comment> {
+    const [comment] = await db.insert(comments).values(insertComment).returning();
+    
+    // Increment comment count on the discussion
+    const [discussion] = await db.select().from(discussions).where(eq(discussions.id, insertComment.discussionId));
+    
+    if (discussion) {
+      const currentCommentCount = discussion.commentCount ?? 0;
+      
+      await db
+        .update(discussions)
+        .set({ commentCount: currentCommentCount + 1 })
+        .where(eq(discussions.id, insertComment.discussionId));
+    }
+    
+    return comment;
+  }
+  
+  async getCommentsByDiscussion(discussionId: number): Promise<Comment[]> {
+    return await db
+      .select()
+      .from(comments)
+      .where(eq(comments.discussionId, discussionId));
+  }
+  
+  // Stats
+  async getStats(): Promise<Stats> {
+    const [statsRecord] = await db.select().from(stats);
+    
+    if (!statsRecord) {
+      // Create initial stats record if it doesn't exist
+      const [newStats] = await db
+        .insert(stats)
+        .values({
+          activeUsers: 0,
+          projectsCreated: 0,
+          communityPosts: 0,
+          githubStars: 7823
+        })
+        .returning();
+      
+      return newStats;
+    }
+    
+    return statsRecord;
+  }
+  
+  async incrementStat(field: keyof Omit<Stats, 'id'>): Promise<Stats> {
+    const [statsRecord] = await db.select().from(stats);
+    
+    if (!statsRecord) {
+      // Create initial stats record if it doesn't exist
+      const [newStats] = await db
+        .insert(stats)
+        .values({
+          activeUsers: field === 'activeUsers' ? 1 : 0,
+          projectsCreated: field === 'projectsCreated' ? 1 : 0,
+          communityPosts: field === 'communityPosts' ? 1 : 0,
+          githubStars: 7823
+        })
+        .returning();
+      
+      return newStats;
+    }
+    
+    const currentValue = statsRecord[field] ?? 0;
+    
+    const [updatedStats] = await db
+      .update(stats)
+      .set({ [field]: currentValue + 1 })
+      .where(eq(stats.id, statsRecord.id))
+      .returning();
+      
+    return updatedStats;
+  }
+}
+
+// Change to database storage
+export const storage = new DatabaseStorage();

@@ -7,6 +7,7 @@ import ForumPage from "@/pages/forum-page";
 import ProjectsPage from "@/pages/projects-page";
 import DocumentationPage from "@/pages/documentation-page";
 import { ProtectedRoute } from "./lib/protected-route";
+import { AuthProvider } from "./hooks/use-auth";
 
 function Router() {
   return (
@@ -23,10 +24,10 @@ function Router() {
 
 function App() {
   return (
-    <>
+    <AuthProvider>
       <Router />
       <Toaster />
-    </>
+    </AuthProvider>
   );
 }
 

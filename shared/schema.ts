@@ -1,7 +1,9 @@
-import { pgTable, text, serial, integer, boolean, timestamp } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, integer, boolean, timestamp, foreignKey } from "drizzle-orm/pg-core";
+import { relations } from "drizzle-orm";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
+// Users table
 export const users = pgTable("users", {
   id: serial("id").primaryKey(),
   username: text("username").notNull().unique(),
@@ -12,9 +14,10 @@ export const users = pgTable("users", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
+// Projects table
 export const projects = pgTable("projects", {
   id: serial("id").primaryKey(),
-  userId: integer("user_id").notNull(),
+  userId: integer("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
   title: text("title").notNull(),
   description: text("description").notNull(),
   techStack: text("tech_stack").array(),
@@ -23,9 +26,10 @@ export const projects = pgTable("projects", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
+// Discussions table
 export const discussions = pgTable("discussions", {
   id: serial("id").primaryKey(),
-  userId: integer("user_id").notNull(),
+  userId: integer("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
   title: text("title").notNull(),
   description: text("description").notNull(),
   tag: text("tag").notNull(),
@@ -35,14 +39,49 @@ export const discussions = pgTable("discussions", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
+// Comments table
 export const comments = pgTable("comments", {
   id: serial("id").primaryKey(),
-  discussionId: integer("discussion_id").notNull(),
-  userId: integer("user_id").notNull(),
+  discussionId: integer("discussion_id").notNull().references(() => discussions.id, { onDelete: "cascade" }),
+  userId: integer("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
   content: text("content").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
+// Relations
+export const usersRelations = relations(users, ({ many }) => ({
+  projects: many(projects),
+  discussions: many(discussions),
+  comments: many(comments),
+}));
+
+export const projectsRelations = relations(projects, ({ one }) => ({
+  user: one(users, {
+    fields: [projects.userId],
+    references: [users.id],
+  }),
+}));
+
+export const discussionsRelations = relations(discussions, ({ one, many }) => ({
+  user: one(users, {
+    fields: [discussions.userId],
+    references: [users.id],
+  }),
+  comments: many(comments),
+}));
+
+export const commentsRelations = relations(comments, ({ one }) => ({
+  discussion: one(discussions, {
+    fields: [comments.discussionId],
+    references: [discussions.id],
+  }),
+  user: one(users, {
+    fields: [comments.userId],
+    references: [users.id],
+  }),
+}));
+
+// Stats table
 export const stats = pgTable("stats", {
   id: serial("id").primaryKey(),
   activeUsers: integer("active_users").default(0),
