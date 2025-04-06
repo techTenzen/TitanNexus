@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'wouter';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { useAuth } from '@/hooks/use-auth';
 import { apiRequest, queryClient } from '@/lib/queryClient';
 import { useToast } from '@/hooks/use-toast';
 
@@ -58,47 +57,50 @@ export function Navbar() {
     { href: '/projects', label: 'Projects' },
   ];
 
-  // Conditionally render auth controls based on user status
-  // This approach avoids using useAuth() at the top level which might throw errors
-  // if the component is rendered outside of an AuthProvider context
+  // State for user auth status
+  const [currentUser, setCurrentUser] = useState<any>(null);
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
   
+  // Check for authentication on component mount
+  useEffect(() => {
+    fetch('/api/user')
+      .then(res => {
+        if (res.ok) return res.json();
+        throw new Error('Not authenticated');
+      })
+      .then(user => {
+        setCurrentUser(user);
+        setIsCheckingAuth(false);
+      })
+      .catch(() => {
+        setCurrentUser(null);
+        setIsCheckingAuth(false);
+      });
+  }, []);
+  
+  // Render auth controls using direct API status 
   const renderAuthControls = () => {
-    try {
-      const { user, logoutMutation, isLoading } = useAuth();
-      
-      if (isLoading) {
-        return <div className="h-10 w-24 bg-background-secondary/50 rounded-lg animate-pulse"></div>;
-      } else if (user) {
-        return (
-          <div className="flex items-center space-x-4">
-            <span className="text-gray-300">Hello, {user.username}</span>
-            <Button 
-              variant="outline" 
-              onClick={handleDirectLogout}
-              disabled={isLoggingOut}
-            >
-              Sign Out
-            </Button>
-          </div>
-        );
-      } else {
-        return (
-          <>
-            <Link href="/auth">
-              <span className="text-sm font-medium hover:text-[#FF3370] transition-colors cursor-pointer">
-                Sign In
-              </span>
-            </Link>
-            <Link href="/auth">
-              <span className="bg-background-secondary border border-[#7928CA] hover:bg-[#7928CA] transition-colors duration-300 rounded-lg px-4 py-2 text-sm font-medium cursor-pointer">
-                Sign Up
-              </span>
-            </Link>
-          </>
-        );
-      }
-    } catch (error) {
-      // If we're outside of an auth context, just show login/signup buttons
+    if (isCheckingAuth) {
+      return <div className="h-10 w-24 bg-background-secondary/50 rounded-lg animate-pulse"></div>;
+    } else if (currentUser) {
+      return (
+        <div className="flex items-center space-x-4">
+          <span className="text-gray-300">Hello, {currentUser.username}</span>
+          <Button 
+            variant="outline" 
+            onClick={handleDirectLogout}
+            disabled={isLoggingOut}
+          >
+            {isLoggingOut ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Signing Out...
+              </>
+            ) : "Sign Out"}
+          </Button>
+        </div>
+      );
+    } else {
       return (
         <>
           <Link href="/auth">
@@ -116,49 +118,29 @@ export function Navbar() {
     }
   };
   
+  // Mobile auth controls using direct API status
   const renderMobileAuthControls = () => {
-    try {
-      const { user, logoutMutation, isLoading } = useAuth();
-      
-      if (isLoading) {
-        return <div className="h-10 w-full bg-background-secondary/50 rounded-lg animate-pulse"></div>;
-      } else if (user) {
-        return (
-          <button 
-            className="w-full text-left block px-3 py-2 text-base font-medium text-gray-300 hover:text-white hover:bg-[#7928CA]/10 rounded-md"
-            onClick={() => {
-              handleDirectLogout();
-              setIsOpen(false);
-            }}
-            disabled={isLoggingOut}
-          >
-            Sign Out
-          </button>
-        );
-      } else {
-        return (
-          <>
-            <Link href="/auth">
-              <span 
-                className="block px-3 py-2 text-base font-medium text-gray-300 hover:text-white hover:bg-[#7928CA]/10 rounded-md cursor-pointer"
-                onClick={() => setIsOpen(false)}
-              >
-                Sign In
-              </span>
-            </Link>
-            <Link href="/auth">
-              <span 
-                className="block px-3 py-2 text-base font-medium text-gray-300 hover:text-white hover:bg-[#7928CA]/10 rounded-md cursor-pointer"
-                onClick={() => setIsOpen(false)}
-              >
-                Sign Up
-              </span>
-            </Link>
-          </>
-        );
-      }
-    } catch (error) {
-      // If we're outside of an auth context, just show login/signup buttons
+    if (isCheckingAuth) {
+      return <div className="h-10 w-full bg-background-secondary/50 rounded-lg animate-pulse"></div>;
+    } else if (currentUser) {
+      return (
+        <button 
+          className="w-full text-left block px-3 py-2 text-base font-medium text-gray-300 hover:text-white hover:bg-[#7928CA]/10 rounded-md"
+          onClick={() => {
+            handleDirectLogout();
+            setIsOpen(false);
+          }}
+          disabled={isLoggingOut}
+        >
+          {isLoggingOut ? (
+            <>
+              <Loader2 className="inline-block mr-2 h-4 w-4 animate-spin" />
+              Signing Out...
+            </>
+          ) : "Sign Out"}
+        </button>
+      );
+    } else {
       return (
         <>
           <Link href="/auth">
