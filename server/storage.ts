@@ -493,23 +493,32 @@ export class DatabaseStorage implements IStorage {
 export const storage = new DatabaseStorage();
 
 // Create admin user if it doesn't exist
-(async function createAdminIfNotExists() {
+setTimeout(async () => {
   try {
     // Check if admin user exists
     const admin = await storage.getUserByUsername('admin21');
     
     if (!admin) {
+      console.log('Admin user does not exist, creating it...');
+      
       // Create admin user with predefined credentials
+      const hashedPassword = await hashPassword('admin123'); // This is a demonstration - in production use a secure password
+      
       await storage.createUser({
         username: 'admin21',
         email: 'admin@titanai.com',
-        password: await hashPassword('admin123'), // This is a demonstration - in production use a secure password
+        password: hashedPassword,
+        profession: 'Platform Administrator',
         isAdmin: true,
-        profession: 'Platform Administrator'
+        bio: 'System administrator',
+        avatarUrl: null
       });
+      
       console.log('Admin user created successfully');
+    } else {
+      console.log('Admin user already exists');
     }
   } catch (error) {
     console.error('Error creating admin user:', error);
   }
-})();
+}, 3000); // Wait 3 seconds to ensure the database connection is established
