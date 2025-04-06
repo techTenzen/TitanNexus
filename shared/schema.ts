@@ -7,7 +7,7 @@ import { z } from "zod";
 export const users = pgTable("users", {
   id: serial("id").primaryKey(),
   username: text("username").notNull().unique(),
-  email: text("email").notNull(),
+  email: text("email").notNull(), // Removed unique constraint to allow multiple accounts with same email
   password: text("password").notNull(),
   bio: text("bio"),
   avatarUrl: text("avatar_url"),

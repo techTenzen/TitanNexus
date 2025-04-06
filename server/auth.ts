@@ -83,16 +83,14 @@ export function setupAuth(app: Express) {
     try {
       const { username, email, password } = req.body;
       
-      // Check if user already exists
+      // Check if username already exists (usernames must be unique)
       const existingUsername = await storage.getUserByUsername(username);
       if (existingUsername) {
         return res.status(400).json({ error: "Username already exists" });
       }
       
-      const existingEmail = await storage.getUserByEmail(email);
-      if (existingEmail) {
-        return res.status(400).json({ error: "Email already in use" });
-      }
+      // Email doesn't need to be unique - allow multiple accounts with same email
+      // but different usernames
       
       // Create user with hashed password
       const hashedPassword = await hashPassword(password);
