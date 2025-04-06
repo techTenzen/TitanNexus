@@ -1,0 +1,104 @@
+🚀 Project Title: Titan AI Community Platform
+
+Description:
+Build a modern, full-stack community platform for my project Titan AI that mimics the look and functionality of the landing page in the attached reference image.
+
+🌐 Key Pages & Features
+🔥 Landing Page (Home)
+Hero section with bold title: "The open-source AI-powered development environment"
+
+Subheading and CTA buttons: "Get Started" & "View on GitHub"
+
+Terminal-style code snippet mockup (with code exactly like the one in the reference image)
+
+Feature grid:
+
+Multi-model Architecture
+
+Web Container Execution
+
+Collaborative Intelligence
+
+Community stats with animated counters:
+
+Active Users
+
+Projects Created
+
+Community Posts
+
+GitHub Stars
+
+Showcase 3 most upvoted Featured Projects from the database (randomly selected but top-voted)
+
+Show top 3 most upvoted Recent Discussions from the forum
+
+Add “Just released: Titan AI 2.0…” ticker/banner exactly like the reference
+
+Include the subtle grid background effect
+
+🧑‍💻 User Authentication
+Email + Password
+
+Allow duplicate emails, but enforce unique usernames
+
+🧾 Documentation Section
+3 pages with placeholder content:
+
+Code Execution Engine
+
+Prompt Parsing & File Handling
+
+API Workflow in Titan AI
+
+💬 Discussion Forum
+Reddit-style threads:
+
+Title, description, tag (General, Issue, Feature Request)
+
+Option to add images
+
+Upvote system + comment counter
+
+Replies under threads
+
+Sidebar with:
+
+List of users (avatar, username, short bio)
+
+🚀 Projects Page
+Users can showcase projects they built with Titan AI
+
+Form to submit:
+
+Title
+
+Short description
+
+Tech stack
+
+Cover image
+
+Projects displayed in cards with upvotes & tags
+
+📊 Dashboard (Home Page Section)
+Mini dashboard with stats:
+
+Number of users
+
+Total projects
+
+Total discussions
+
+% growth indicators in green like reference image
+
+🖌️ Design Requirements
+Dark mode default with neon gradient accents
+
+Use glassmorphism and modern developer aesthetic
+
+Animations, hover effects, and smooth transitions
+
+Use vibrant colors (black background with red, purple, or white neon/glow)
+
+Responsive and mobile-friendly
