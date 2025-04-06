@@ -1,6 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { useAuth } from '@/hooks/use-auth';
 import { Discussion } from '@shared/schema';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiRequest } from '@/lib/queryClient';
@@ -18,10 +17,28 @@ interface DiscussionCardProps {
 }
 
 export function DiscussionCard({ discussion, index, isDetailView = false }: DiscussionCardProps) {
-  const { user } = useAuth();
   const queryClient = useQueryClient();
   const { toast } = useToast();
   const [isUpvoting, setIsUpvoting] = useState(false);
+  const [currentUser, setCurrentUser] = useState<any>(null);
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
+  
+  // Check authentication status without useAuth hook
+  useEffect(() => {
+    fetch('/api/user')
+      .then(res => {
+        if (res.ok) return res.json();
+        throw new Error('Not authenticated');
+      })
+      .then(user => {
+        setCurrentUser(user);
+        setIsCheckingAuth(false);
+      })
+      .catch(() => {
+        setCurrentUser(null);
+        setIsCheckingAuth(false);
+      });
+  }, []);
   
   const upvoteMutation = useMutation({
     mutationFn: async () => {
@@ -43,7 +60,7 @@ export function DiscussionCard({ discussion, index, isDetailView = false }: Disc
   });
 
   const handleUpvote = () => {
-    if (!user) {
+    if (!currentUser) {
       toast({
         title: "Authentication required",
         description: "Please sign in to upvote discussions",

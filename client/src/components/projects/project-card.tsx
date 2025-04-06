@@ -1,11 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Project } from '@shared/schema';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { apiRequest } from '@/lib/queryClient';
 import { Link } from 'wouter';
 import { Star } from 'lucide-react';
-import { useAuth } from '@/hooks/use-auth';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -18,10 +17,28 @@ interface ProjectCardProps {
 }
 
 export function ProjectCard({ project, index }: ProjectCardProps) {
-  const { user } = useAuth();
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [isUpvoting, setIsUpvoting] = useState(false);
+  const [currentUser, setCurrentUser] = useState<any>(null);
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
+  
+  // Check authentication status without useAuth hook
+  useEffect(() => {
+    fetch('/api/user')
+      .then(res => {
+        if (res.ok) return res.json();
+        throw new Error('Not authenticated');
+      })
+      .then(user => {
+        setCurrentUser(user);
+        setIsCheckingAuth(false);
+      })
+      .catch(() => {
+        setCurrentUser(null);
+        setIsCheckingAuth(false);
+      });
+  }, []);
   
   const { data: projectCreator, isLoading: isLoadingUser } = useQuery({
     queryKey: [`/api/user/${project.userId}`],
@@ -48,7 +65,7 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
   });
   
   const handleUpvote = () => {
-    if (!user) {
+    if (!currentUser) {
       toast({
         title: "Authentication required",
         description: "Please sign in to upvote projects",
