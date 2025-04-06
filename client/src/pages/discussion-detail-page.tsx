@@ -91,18 +91,30 @@ export default function DiscussionDetailPage() {
     }
   });
   
-  // Function to fetch user data for a comment
-  const useCommentAuthor = (userId: number) => {
-    return useQuery({
-      queryKey: [`/api/user/${userId}`],
-      queryFn: async () => {
+  // Fetch all comment authors at once
+  const commentUserIds = Array.from(new Set(comments.map(comment => comment.userId)));
+  
+  const { data: commentAuthors = {} } = useQuery({
+    queryKey: ['commentAuthors', commentUserIds],
+    queryFn: async () => {
+      if (commentUserIds.length === 0) return {};
+      
+      // Fetch all users in parallel
+      const userPromises = commentUserIds.map(async (userId) => {
         const res = await fetch(`/api/user/${userId}`);
         if (!res.ok) return null;
-        return await res.json();
-      },
-      enabled: !!userId
-    });
-  };
+        return res.json();
+      });
+      
+      const users = await Promise.all(userPromises);
+      // Create a map of userId -> user data
+      return commentUserIds.reduce((acc, userId, index) => {
+        acc[userId] = users[index];
+        return acc;
+      }, {} as Record<number, any>);
+    },
+    enabled: commentUserIds.length > 0
+  });
   
   if (!match) {
     return (
@@ -189,7 +201,7 @@ export default function DiscussionDetailPage() {
           {comments.length > 0 ? (
             <div className="space-y-6">
               {comments.map((comment: Comment, index: number) => {
-                const { data: author } = useCommentAuthor(comment.userId);
+                const author = commentAuthors[comment.userId];
                 
                 return (
                   <div 
