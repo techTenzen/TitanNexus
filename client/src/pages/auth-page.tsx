@@ -1,13 +1,14 @@
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { useAuth } from '@/hooks/use-auth';
 import { useLocation } from 'wouter';
 import { TickerBanner } from '@/components/layout/ticker-banner';
 import { Navbar } from '@/components/layout/navbar';
 import { Footer } from '@/components/layout/footer';
 import { motion } from 'framer-motion';
+import { apiRequest, queryClient } from '../lib/queryClient';
+import { useToast } from '@/hooks/use-toast';
 
 import {
   Card,
@@ -52,15 +53,25 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 type RegisterFormValues = z.infer<typeof registerSchema>;
 
 export default function AuthPage() {
-  const { user, loginMutation, registerMutation } = useAuth();
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
+  const [isRegistering, setIsRegistering] = useState(false);
+  const { toast } = useToast();
   const [_, navigate] = useLocation();
   
-  // Redirect to home if already logged in
+  // Check if user is already logged in
   useEffect(() => {
-    if (user) {
-      navigate('/');
-    }
-  }, [user, navigate]);
+    fetch('/api/user')
+      .then(res => {
+        if (res.ok) return res.json();
+        throw new Error('Not authenticated');
+      })
+      .then(user => {
+        if (user) navigate('/');
+      })
+      .catch(() => {
+        // User not logged in, show login page
+      });
+  }, [navigate]);
   
   const loginForm = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -80,13 +91,59 @@ export default function AuthPage() {
     },
   });
   
-  const onLogin = (data: LoginFormValues) => {
-    loginMutation.mutate(data);
+  const onLogin = async (data: LoginFormValues) => {
+    try {
+      setIsLoggingIn(true);
+      const res = await apiRequest("POST", "/api/login", data);
+      const user = await res.json();
+      
+      // Update auth state
+      queryClient.setQueryData(["/api/user"], user);
+      queryClient.invalidateQueries({ queryKey: ["/api/user"] });
+      
+      toast({
+        title: "Login successful",
+        description: `Welcome back, ${user.username}!`,
+      });
+      
+      navigate('/');
+    } catch (error) {
+      toast({
+        title: "Login failed",
+        description: error instanceof Error ? error.message : "An unknown error occurred",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoggingIn(false);
+    }
   };
   
-  const onRegister = (data: RegisterFormValues) => {
-    const { confirmPassword, ...registerData } = data;
-    registerMutation.mutate(registerData);
+  const onRegister = async (data: RegisterFormValues) => {
+    try {
+      setIsRegistering(true);
+      const { confirmPassword, ...registerData } = data;
+      const res = await apiRequest("POST", "/api/register", registerData);
+      const user = await res.json();
+      
+      // Update auth state
+      queryClient.setQueryData(["/api/user"], user);
+      queryClient.invalidateQueries({ queryKey: ["/api/user"] });
+      
+      toast({
+        title: "Registration successful",
+        description: `Welcome to Titan AI, ${user.username}!`,
+      });
+      
+      navigate('/');
+    } catch (error) {
+      toast({
+        title: "Registration failed",
+        description: error instanceof Error ? error.message : "An unknown error occurred",
+        variant: "destructive",
+      });
+    } finally {
+      setIsRegistering(false);
+    }
   };
   
   return (
@@ -180,9 +237,9 @@ export default function AuthPage() {
                           <Button 
                             type="submit" 
                             className="w-full bg-gradient-to-r from-[#FF3370] to-[#7928CA]"
-                            disabled={loginMutation.isPending}
+                            disabled={isLoggingIn}
                           >
-                            {loginMutation.isPending ? "Signing in..." : "Sign In"}
+                            {isLoggingIn ? "Signing in..." : "Sign In"}
                           </Button>
                         </form>
                       </Form>
@@ -250,9 +307,9 @@ export default function AuthPage() {
                           <Button 
                             type="submit" 
                             className="w-full bg-gradient-to-r from-[#FF3370] to-[#7928CA]"
-                            disabled={registerMutation.isPending}
+                            disabled={isRegistering}
                           >
-                            {registerMutation.isPending ? "Creating account..." : "Create Account"}
+                            {isRegistering ? "Creating account..." : "Create Account"}
                           </Button>
                         </form>
                       </Form>
