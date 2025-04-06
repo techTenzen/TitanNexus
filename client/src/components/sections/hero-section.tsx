@@ -92,7 +92,7 @@ createReactComponent().then(code => {
             className="mt-8 flex flex-wrap justify-center gap-4"
             variants={itemVariants}
           >
-            <Link href="/projects">
+            <Link href="/auth">
               <GradientButton size="lg">Get Started</GradientButton>
             </Link>
             <GradientButton 

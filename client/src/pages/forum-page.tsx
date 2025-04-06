@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { TickerBanner } from '@/components/layout/ticker-banner';
 import { Navbar } from '@/components/layout/navbar';
@@ -9,10 +9,13 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Loader2, MessageCircle, PlusCircle, Users } from 'lucide-react';
-import { useAuth } from '@/hooks/use-auth';
+import { AuthContext } from '@/hooks/use-auth';
 
 export default function ForumPage() {
-  const { user } = useAuth();
+  // Using useContext directly to avoid crashing if context is missing
+  const authContext = useContext(AuthContext);
+  const user = authContext?.user || null;
+  
   const [showNewDiscussionForm, setShowNewDiscussionForm] = useState(false);
   const [activeTab, setActiveTab] = useState<string>('all');
 

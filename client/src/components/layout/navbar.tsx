@@ -1,16 +1,15 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'wouter';
 import { Menu, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { AuthContext } from '@/hooks/use-auth';
+import { useAuth } from '@/hooks/use-auth';
 
 // Navbar component for all users
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [location] = useLocation();
   const [isScrolled, setIsScrolled] = useState(false);
-  const authContext = useContext(AuthContext);
   
   useEffect(() => {
     const handleScroll = () => {
@@ -28,12 +27,129 @@ export function Navbar() {
     { href: '/projects', label: 'Projects' },
   ];
 
-  // If auth context is not available or loading
-  if (!authContext) {
-    return null; // Or return a loading state
-  }
-
-  const { user, logoutMutation, isLoading } = authContext;
+  // Conditionally render auth controls based on user status
+  // This approach avoids using useAuth() at the top level which might throw errors
+  // if the component is rendered outside of an AuthProvider context
+  
+  const renderAuthControls = () => {
+    try {
+      const { user, logoutMutation, isLoading } = useAuth();
+      
+      if (isLoading) {
+        return <div className="h-10 w-24 bg-background-secondary/50 rounded-lg animate-pulse"></div>;
+      } else if (user) {
+        return (
+          <div className="flex items-center space-x-4">
+            <span className="text-gray-300">Hello, {user.username}</span>
+            <Button 
+              variant="outline" 
+              onClick={() => logoutMutation.mutate()}
+              disabled={logoutMutation.isPending}
+            >
+              Sign Out
+            </Button>
+          </div>
+        );
+      } else {
+        return (
+          <>
+            <Link href="/auth">
+              <span className="text-sm font-medium hover:text-[#FF3370] transition-colors cursor-pointer">
+                Sign In
+              </span>
+            </Link>
+            <Link href="/auth">
+              <span className="bg-background-secondary border border-[#7928CA] hover:bg-[#7928CA] transition-colors duration-300 rounded-lg px-4 py-2 text-sm font-medium cursor-pointer">
+                Sign Up
+              </span>
+            </Link>
+          </>
+        );
+      }
+    } catch (error) {
+      // If we're outside of an auth context, just show login/signup buttons
+      return (
+        <>
+          <Link href="/auth">
+            <span className="text-sm font-medium hover:text-[#FF3370] transition-colors cursor-pointer">
+              Sign In
+            </span>
+          </Link>
+          <Link href="/auth">
+            <span className="bg-background-secondary border border-[#7928CA] hover:bg-[#7928CA] transition-colors duration-300 rounded-lg px-4 py-2 text-sm font-medium cursor-pointer">
+              Sign Up
+            </span>
+          </Link>
+        </>
+      );
+    }
+  };
+  
+  const renderMobileAuthControls = () => {
+    try {
+      const { user, logoutMutation, isLoading } = useAuth();
+      
+      if (isLoading) {
+        return <div className="h-10 w-full bg-background-secondary/50 rounded-lg animate-pulse"></div>;
+      } else if (user) {
+        return (
+          <button 
+            className="w-full text-left block px-3 py-2 text-base font-medium text-gray-300 hover:text-white hover:bg-[#7928CA]/10 rounded-md"
+            onClick={() => {
+              logoutMutation.mutate();
+              setIsOpen(false);
+            }}
+            disabled={logoutMutation.isPending}
+          >
+            Sign Out
+          </button>
+        );
+      } else {
+        return (
+          <>
+            <Link href="/auth">
+              <span 
+                className="block px-3 py-2 text-base font-medium text-gray-300 hover:text-white hover:bg-[#7928CA]/10 rounded-md cursor-pointer"
+                onClick={() => setIsOpen(false)}
+              >
+                Sign In
+              </span>
+            </Link>
+            <Link href="/auth">
+              <span 
+                className="block px-3 py-2 text-base font-medium text-gray-300 hover:text-white hover:bg-[#7928CA]/10 rounded-md cursor-pointer"
+                onClick={() => setIsOpen(false)}
+              >
+                Sign Up
+              </span>
+            </Link>
+          </>
+        );
+      }
+    } catch (error) {
+      // If we're outside of an auth context, just show login/signup buttons
+      return (
+        <>
+          <Link href="/auth">
+            <span 
+              className="block px-3 py-2 text-base font-medium text-gray-300 hover:text-white hover:bg-[#7928CA]/10 rounded-md cursor-pointer"
+              onClick={() => setIsOpen(false)}
+            >
+              Sign In
+            </span>
+          </Link>
+          <Link href="/auth">
+            <span 
+              className="block px-3 py-2 text-base font-medium text-gray-300 hover:text-white hover:bg-[#7928CA]/10 rounded-md cursor-pointer"
+              onClick={() => setIsOpen(false)}
+            >
+              Sign Up
+            </span>
+          </Link>
+        </>
+      );
+    }
+  };
 
   return (
     <nav className={cn(
@@ -66,33 +182,7 @@ export function Navbar() {
           </div>
           
           <div className="hidden md:flex items-center space-x-4">
-            {isLoading ? (
-              <div className="h-10 w-24 bg-background-secondary/50 rounded-lg animate-pulse"></div>
-            ) : user ? (
-              <div className="flex items-center space-x-4">
-                <span className="text-gray-300">Hello, {user.username}</span>
-                <Button 
-                  variant="outline" 
-                  onClick={() => logoutMutation.mutate()}
-                  disabled={logoutMutation.isPending}
-                >
-                  Sign Out
-                </Button>
-              </div>
-            ) : (
-              <>
-                <Link href="/auth">
-                  <span className="text-sm font-medium hover:text-[#FF3370] transition-colors cursor-pointer">
-                    Sign In
-                  </span>
-                </Link>
-                <Link href="/auth">
-                  <span className="bg-background-secondary border border-[#7928CA] hover:bg-[#7928CA] transition-colors duration-300 rounded-lg px-4 py-2 text-sm font-medium cursor-pointer">
-                    Sign Up
-                  </span>
-                </Link>
-              </>
-            )}
+            {renderAuthControls()}
           </div>
           
           {/* Mobile menu button */}
@@ -132,21 +222,8 @@ export function Navbar() {
                 </span>
               </Link>
             ))}
-            {isLoading ? (
-              <div className="h-10 w-full bg-background-secondary/50 rounded-lg animate-pulse"></div>
-            ) : user ? (
-              <button 
-                className="w-full text-left block px-3 py-2 text-base font-medium text-gray-300 hover:text-white hover:bg-[#7928CA]/10 rounded-md"
-                onClick={() => {
-                  logoutMutation.mutate();
-                  setIsOpen(false);
-                }}
-                disabled={logoutMutation.isPending}
-              >
-                Sign Out
-              </button>
-            ) : (
-              <>
+            <div className="mobile-auth-controls">
+              <div className="mobile-auth-btns">
                 <Link href="/auth">
                   <span 
                     className="block px-3 py-2 text-base font-medium text-gray-300 hover:text-white hover:bg-[#7928CA]/10 rounded-md cursor-pointer"
@@ -163,8 +240,8 @@ export function Navbar() {
                     Sign Up
                   </span>
                 </Link>
-              </>
-            )}
+              </div>
+            </div>
           </div>
         </div>
       )}

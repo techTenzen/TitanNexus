@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { TickerBanner } from '@/components/layout/ticker-banner';
 import { Navbar } from '@/components/layout/navbar';
@@ -10,10 +10,13 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Loader2, PlusCircle } from 'lucide-react';
-import { useAuth } from '@/hooks/use-auth';
+import { AuthContext } from '@/hooks/use-auth';
 
 export default function ProjectsPage() {
-  const { user } = useAuth();
+  // Using useContext directly to avoid crashing if context is missing
+  const authContext = useContext(AuthContext);
+  const user = authContext?.user || null;
+  
   const [showNewProjectForm, setShowNewProjectForm] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [sortOption, setSortOption] = useState('upvotes');
