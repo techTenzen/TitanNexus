@@ -26,7 +26,7 @@ export function DiscussionCard({ discussion, index, isDetailView = false }: Disc
   
   // Fetch the author information
   const { data: author } = useQuery({
-    queryKey: [`/api/users/${discussion.userId}`],
+    queryKey: [`/api/user/${discussion.userId}`],
     queryFn: async () => {
       const res = await fetch(`/api/user/${discussion.userId}`);
       if (!res.ok) return null;
@@ -158,10 +158,10 @@ export function DiscussionCard({ discussion, index, isDetailView = false }: Disc
             </span>
           </div>
           <Link href={isDetailView ? "#" : `/forum/${discussion.id}`}>
-            <a className="block hover:opacity-90 transition-opacity">
+            <div className="block hover:opacity-90 transition-opacity">
               <h3 className="text-xl font-bold mb-2">{discussion.title}</h3>
               <p className="text-gray-400 mb-4 line-clamp-3">{discussion.description}</p>
-            </a>
+            </div>
           </Link>
           
           {discussion.imageUrl && (

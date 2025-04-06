@@ -72,13 +72,23 @@ export default function DiscussionDetailPage() {
   
   const { data: discussion, isLoading, error } = useQuery<Discussion>({
     queryKey: [`/api/discussions/${discussionId}`],
-    enabled: !!discussionId
+    enabled: !!discussionId,
+    queryFn: async () => {
+      const res = await fetch(`/api/discussions/${discussionId}`);
+      if (!res.ok) throw new Error('Failed to fetch discussion');
+      return res.json();
+    }
   });
   
   // Fetch comments
   const { data: comments = [] } = useQuery<Comment[]>({
     queryKey: [`/api/discussions/${discussionId}/comments`],
-    enabled: !!discussionId
+    enabled: !!discussionId,
+    queryFn: async () => {
+      const res = await fetch(`/api/discussions/${discussionId}/comments`);
+      if (!res.ok) throw new Error('Failed to fetch comments');
+      return res.json();
+    }
   });
   
   // Function to fetch user data for a comment
