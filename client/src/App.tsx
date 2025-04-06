@@ -4,6 +4,7 @@ import NotFound from "@/pages/not-found";
 import HomePage from "@/pages/home-page";
 import AuthPage from "@/pages/auth-page";
 import ForumPage from "@/pages/forum-page";
+import DiscussionDetailPage from "@/pages/discussion-detail-page";
 import ProjectsPage from "@/pages/projects-page";
 import DocumentationPage from "@/pages/documentation-page";
 import { ProtectedRoute } from "./lib/protected-route";
@@ -14,6 +15,7 @@ function Router() {
       <Route path="/" component={HomePage} />
       <Route path="/auth" component={AuthPage} />
       <Route path="/forum" component={ForumPage} />
+      <Route path="/forum/:id" component={DiscussionDetailPage} />
       <Route path="/projects" component={ProjectsPage} />
       <Route path="/documentation" component={DocumentationPage} />
       <Route component={NotFound} />
