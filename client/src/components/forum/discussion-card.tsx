@@ -1,14 +1,15 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Discussion } from '@shared/schema';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query';
 import { apiRequest } from '@/lib/queryClient';
 import { Link } from 'wouter';
-import { ChevronUp, ChevronDown, MessageSquare, Clock } from 'lucide-react';
+import { ChevronUp, ChevronDown, MessageSquare, Clock, User } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 interface DiscussionCardProps {
   discussion: Discussion;
@@ -22,6 +23,16 @@ export function DiscussionCard({ discussion, index, isDetailView = false }: Disc
   const [isUpvoting, setIsUpvoting] = useState(false);
   const [currentUser, setCurrentUser] = useState<any>(null);
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
+  
+  // Fetch the author information
+  const { data: author } = useQuery({
+    queryKey: [`/api/users/${discussion.userId}`],
+    queryFn: async () => {
+      const res = await fetch(`/api/user/${discussion.userId}`);
+      if (!res.ok) return null;
+      return await res.json();
+    }
+  });
   
   // Check authentication status without useAuth hook
   useEffect(() => {
@@ -125,6 +136,23 @@ export function DiscussionCard({ discussion, index, isDetailView = false }: Disc
             <span className={`px-3 py-1 text-xs rounded-full mr-2 ${getTagColor(discussion.tag)}`}>
               {discussion.tag}
             </span>
+            <div className="flex items-center mr-2">
+              <Avatar className="h-6 w-6 mr-2">
+                {author?.avatarUrl ? (
+                  <AvatarImage src={author.avatarUrl} alt={author?.username || "User"} />
+                ) : (
+                  <AvatarFallback className="bg-gray-700 text-xs">
+                    {author?.username?.charAt(0).toUpperCase() || <User className="h-4 w-4" />}
+                  </AvatarFallback>
+                )}
+              </Avatar>
+              <div className="flex flex-col">
+                <span className="text-white font-medium">{author?.username || "Unknown"}</span>
+                {author?.profession && (
+                  <span className="text-gray-400 text-xs">{author.profession}</span>
+                )}
+              </div>
+            </div>
             <span className="text-gray-400 text-sm">
               Posted {formatDate(discussion.createdAt)}
             </span>

@@ -7,8 +7,9 @@ import { DiscussionCard } from '@/components/forum/discussion-card';
 import { DiscussionForm } from '@/components/forum/discussion-form';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Loader2, MessageCircle, PlusCircle, Users } from 'lucide-react';
+import { Loader2, MessageCircle, PlusCircle, User, Users } from 'lucide-react';
 import { AuthContext } from '@/hooks/use-auth';
 
 export default function ForumPage() {
@@ -27,9 +28,9 @@ export default function ForumPage() {
     queryKey: ['/api/discussions'],
   });
 
-  const { data: users } = useQuery({
+  const { data: users = [] } = useQuery({
     queryKey: ['/api/users'],
-    enabled: false, // Would be enabled in a real implementation
+    enabled: true // Fetch real users for the community members section
   });
 
   // Filter discussions based on active tab
@@ -138,20 +139,29 @@ export default function ForumPage() {
                 </h3>
                 
                 <div className="space-y-4">
-                  {/* In a real implementation, we would map over actual users here */}
-                  {[1, 2, 3, 4, 5].map((_, index) => (
-                    <div key={index} className="flex items-center space-x-3">
-                      <img
-                        src={`https://randomuser.me/api/portraits/${index % 2 ? 'women' : 'men'}/${(index * 17) % 100}.jpg`}
-                        alt="User avatar"
-                        className="w-10 h-10 rounded-full object-cover border border-white/10"
-                      />
-                      <div>
-                        <p className="font-medium">{['SarahDev', 'CodeMaster', 'AIExplorer', 'TechGuru', 'DataWizard'][index]}</p>
-                        <p className="text-xs text-gray-400">{['AI Researcher', 'Full-stack Dev', 'ML Engineer', 'UI Designer', 'Data Scientist'][index]}</p>
+                  {users && users.length > 0 ? (
+                    users.slice(0, 5).map((user, index) => (
+                      <div key={user.id} className="flex items-center space-x-3">
+                        <Avatar className="h-10 w-10">
+                          {user.avatarUrl ? (
+                            <AvatarImage src={user.avatarUrl} alt={user.username} />
+                          ) : (
+                            <AvatarFallback className="bg-gray-700 text-sm">
+                              {user.username?.charAt(0).toUpperCase() || <User className="h-5 w-5" />}
+                            </AvatarFallback>
+                          )}
+                        </Avatar>
+                        <div>
+                          <p className="font-medium">{user.username}</p>
+                          <p className="text-xs text-gray-400">{user.profession || 'Community Member'}</p>
+                        </div>
                       </div>
+                    ))
+                  ) : (
+                    <div className="text-center py-4">
+                      <p className="text-sm text-gray-400">Loading community members...</p>
                     </div>
-                  ))}
+                  )}
                 </div>
                 
                 <div className="mt-4 pt-4 border-t border-white/10">

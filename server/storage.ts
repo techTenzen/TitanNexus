@@ -116,6 +116,7 @@ export class MemStorage implements IStorage {
       ...insertUser, 
       id, 
       createdAt: now,
+      profession: insertUser.profession || null,
       bio: insertUser.bio || null,
       avatarUrl: insertUser.avatarUrl || null
     };

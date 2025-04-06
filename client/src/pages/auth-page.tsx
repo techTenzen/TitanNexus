@@ -42,6 +42,7 @@ const loginSchema = z.object({
 const registerSchema = z.object({
   username: z.string().min(3, "Username must be at least 3 characters"),
   email: z.string().email("Please enter a valid email address"),
+  profession: z.string().optional(),
   password: z.string().min(6, "Password must be at least 6 characters"),
   confirmPassword: z.string(),
 }).refine(data => data.password === data.confirmPassword, {
@@ -95,6 +96,7 @@ export default function AuthPage() {
     defaultValues: {
       username: "",
       email: "",
+      profession: "",
       password: "",
       confirmPassword: "",
     },
@@ -222,6 +224,9 @@ export default function AuthPage() {
                   <div className="text-center">
                     <h3 className="text-lg font-medium">{currentUser.username}</h3>
                     <p className="text-sm text-gray-400">{currentUser.email}</p>
+                    {currentUser.profession && (
+                      <p className="text-sm text-gray-400 mt-1">{currentUser.profession}</p>
+                    )}
                   </div>
                 </div>
                 <div className="flex flex-col space-y-3">
@@ -373,6 +378,20 @@ export default function AuthPage() {
                                 <FormLabel>Email</FormLabel>
                                 <FormControl>
                                   <Input type="email" placeholder="john@example.com" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          
+                          <FormField
+                            control={registerForm.control}
+                            name="profession"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Profession (optional)</FormLabel>
+                                <FormControl>
+                                  <Input placeholder="AI Researcher, Developer, etc." {...field} />
                                 </FormControl>
                                 <FormMessage />
                               </FormItem>

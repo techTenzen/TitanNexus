@@ -6,10 +6,13 @@ import { TickerBanner } from '@/components/layout/ticker-banner';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Discussion, Comment } from '@shared/schema';
 import { DiscussionCard } from '@/components/forum/discussion-card';
-import { Loader2, ArrowLeft } from 'lucide-react';
+import { Loader2, ArrowLeft, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { apiRequest } from '@/lib/queryClient';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+
+
 
 export default function DiscussionDetailPage() {
   const [_, setLocation] = useLocation();
@@ -77,6 +80,19 @@ export default function DiscussionDetailPage() {
     queryKey: [`/api/discussions/${discussionId}/comments`],
     enabled: !!discussionId
   });
+  
+  // Function to fetch user data for a comment
+  const useCommentAuthor = (userId: number) => {
+    return useQuery({
+      queryKey: [`/api/user/${userId}`],
+      queryFn: async () => {
+        const res = await fetch(`/api/user/${userId}`);
+        if (!res.ok) return null;
+        return await res.json();
+      },
+      enabled: !!userId
+    });
+  };
   
   if (!match) {
     return (
@@ -162,25 +178,42 @@ export default function DiscussionDetailPage() {
           
           {comments.length > 0 ? (
             <div className="space-y-6">
-              {comments.map((comment: Comment, index: number) => (
-                <div 
-                  key={comment.id}
-                  className="bg-background-secondary/70 backdrop-blur-sm border border-white/10 rounded-xl p-6"
-                >
-                  <div className="flex items-start space-x-4">
-                    <div className="w-10 h-10 rounded-full bg-[#7928CA]/20 flex items-center justify-center">
-                      <span className="text-lg font-bold text-[#7928CA]">U</span>
-                    </div>
-                    <div className="flex-1">
-                      <div className="flex justify-between items-center mb-2">
-                        <span className="font-semibold">User #{comment.userId}</span>
-                        <span className="text-xs text-gray-400">{new Date(comment.createdAt).toLocaleString()}</span>
+              {comments.map((comment: Comment, index: number) => {
+                const { data: author } = useCommentAuthor(comment.userId);
+                
+                return (
+                  <div 
+                    key={comment.id}
+                    className="bg-background-secondary/70 backdrop-blur-sm border border-white/10 rounded-xl p-6"
+                  >
+                    <div className="flex items-start space-x-4">
+                      <Avatar className="h-10 w-10">
+                        {author?.avatarUrl ? (
+                          <AvatarImage src={author.avatarUrl} alt={author?.username || "User"} />
+                        ) : (
+                          <AvatarFallback className="bg-gray-700 text-sm">
+                            {author?.username?.charAt(0).toUpperCase() || <User className="h-5 w-5" />}
+                          </AvatarFallback>
+                        )}
+                      </Avatar>
+                      <div className="flex-1">
+                        <div className="flex justify-between items-center mb-2">
+                          <span className="font-semibold">{author?.username || `User #${comment.userId}`}</span>
+                          <span className="text-xs text-gray-400">{new Date(comment.createdAt).toLocaleString()}</span>
+                        </div>
+                        <p className="text-gray-300">{comment.content}</p>
+                        {author?.profession && (
+                          <div className="mt-2">
+                            <span className="text-xs bg-gray-700/50 text-gray-300 px-2 py-1 rounded-full">
+                              {author.profession}
+                            </span>
+                          </div>
+                        )}
                       </div>
-                      <p className="text-gray-300">{comment.content}</p>
                     </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           ) : (
             <div className="text-center py-12 bg-background-secondary/30 rounded-xl border border-white/5">

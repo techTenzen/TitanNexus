@@ -9,6 +9,7 @@ export const users = pgTable("users", {
   username: text("username").notNull().unique(),
   email: text("email").notNull(), // Removed unique constraint to allow multiple accounts with same email
   password: text("password").notNull(),
+  profession: text("profession"), // Added profession field for community page
   bio: text("bio"),
   avatarUrl: text("avatar_url"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
@@ -95,6 +96,7 @@ export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
   email: true,
   password: true,
+  profession: true,
   bio: true,
   avatarUrl: true,
 });

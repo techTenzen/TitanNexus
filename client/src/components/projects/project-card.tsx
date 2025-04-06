@@ -42,7 +42,12 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
   
   const { data: projectCreator, isLoading: isLoadingUser } = useQuery({
     queryKey: [`/api/user/${project.userId}`],
-    enabled: false, // Don't fetch yet, just a placeholder for real implementation
+    queryFn: async () => {
+      const res = await fetch(`/api/user/${project.userId}`);
+      if (!res.ok) return null;
+      return await res.json();
+    },
+    enabled: !!project.userId,
   });
   
   const upvoteMutation = useMutation({
@@ -84,10 +89,10 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
     return colors[index % colors.length];
   };
   
-  // For demo purposes - create a fake project creator
-  const creator = {
-    username: `user${project.userId}`,
-    avatarUrl: `https://randomuser.me/api/portraits/${project.userId % 2 ? 'women' : 'men'}/${project.userId % 100}.jpg`
+  // Use the real project creator data or fallback
+  const creator = projectCreator || {
+    username: `User #${project.userId}`,
+    avatarUrl: null
   };
   
   // Safely handle techStack which can be null, string[], or a comma-separated string
@@ -162,7 +167,12 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
                 }}
               />
             )}
-            <span className="text-xs text-gray-400">{creator.username}</span>
+            <div className="flex flex-col">
+              <span className="text-xs text-gray-400">{creator.username}</span>
+              {creator.profession && (
+                <span className="text-xs text-gray-500">{creator.profession}</span>
+              )}
+            </div>
           </div>
           <Link href={`/projects/${project.id}`}>
             <a className="text-[#00EAFF] hover:text-[#7928CA] text-sm">View Project</a>
