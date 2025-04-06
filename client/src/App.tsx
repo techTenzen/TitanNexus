@@ -24,10 +24,10 @@ function Router() {
 
 function App() {
   return (
-    <AuthProvider>
+    <>
       <Router />
       <Toaster />
-    </AuthProvider>
+    </>
   );
 }
 
