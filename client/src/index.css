@@ -154,3 +154,12 @@
   mask-composite: exclude;
   pointer-events: none;
 }
+
+/* Improve textarea and input visibility */
+::placeholder {
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+
+textarea, input {
+  color: white !important;
+}

@@ -110,7 +110,7 @@ export function DiscussionCard({ discussion, index, isDetailView = false }: Disc
           >
             <ChevronUp className="h-6 w-6" />
           </Button>
-          <span className="font-bold my-1">{discussion.upvotes}</span>
+          <span className="font-bold my-1">{discussion.upvotes ?? 0}</span>
           <Button
             variant="ghost"
             size="sm"
@@ -149,11 +149,11 @@ export function DiscussionCard({ discussion, index, isDetailView = false }: Disc
           <div className="flex items-center text-gray-400 text-sm">
             <div className="flex items-center mr-4">
               <MessageSquare className="w-4 h-4 mr-1" />
-              <span>{discussion.commentCount} comments</span>
+              <span>{discussion.commentCount ?? 0} comments</span>
             </div>
             <div className="flex items-center">
               <Clock className="w-4 h-4 mr-1" />
-              <span>{discussion.commentCount > 0 ? 'Active' : 'New'}</span>
+              <span>{(discussion.commentCount ?? 0) > 0 ? 'Active' : 'New'}</span>
             </div>
           </div>
         </div>

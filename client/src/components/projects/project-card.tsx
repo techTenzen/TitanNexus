@@ -90,8 +90,12 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
     avatarUrl: `https://randomuser.me/api/portraits/${project.userId % 2 ? 'women' : 'men'}/${project.userId % 100}.jpg`
   };
   
-  const techStack = Array.isArray(project.techStack) ? project.techStack : 
-    project.techStack?.split(',').map(tech => tech.trim()) || ["JavaScript", "React"];
+  // Safely handle techStack which can be null, string[], or a comma-separated string
+  const techStack = Array.isArray(project.techStack) 
+    ? project.techStack 
+    : (typeof project.techStack === 'string' 
+        ? project.techStack.split(',').map(tech => tech.trim()) 
+        : []);
   
   return (
     <motion.div
@@ -122,7 +126,7 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
             disabled={upvoteMutation.isPending}
           >
             <Star className="w-4 h-4 mr-1" />
-            <span>{project.upvotes}</span>
+            <span>{project.upvotes ?? 0}</span>
           </Button>
         </div>
         

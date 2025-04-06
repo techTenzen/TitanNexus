@@ -112,7 +112,13 @@ export class MemStorage implements IStorage {
   async createUser(insertUser: InsertUser): Promise<User> {
     const id = this.userId++;
     const now = new Date();
-    const user: User = { ...insertUser, id, createdAt: now };
+    const user: User = { 
+      ...insertUser, 
+      id, 
+      createdAt: now,
+      bio: insertUser.bio || null,
+      avatarUrl: insertUser.avatarUrl || null
+    };
     this.users.set(id, user);
     
     // Increment active users count
@@ -137,7 +143,9 @@ export class MemStorage implements IStorage {
       ...insertProject, 
       id, 
       upvotes: 0, 
-      createdAt: now 
+      createdAt: now,
+      techStack: insertProject.techStack || null,
+      coverImageUrl: insertProject.coverImageUrl || null
     };
     this.projects.set(id, project);
     
@@ -181,7 +189,8 @@ export class MemStorage implements IStorage {
       id, 
       upvotes: 0, 
       commentCount: 0,
-      createdAt: now 
+      createdAt: now,
+      imageUrl: insertDiscussion.imageUrl || null
     };
     this.discussions.set(id, discussion);
     

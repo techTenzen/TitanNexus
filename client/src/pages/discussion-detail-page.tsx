@@ -192,11 +192,12 @@ export default function DiscussionDetailPage() {
             <div className="mt-8 bg-background-secondary/70 backdrop-blur-sm border border-white/10 rounded-xl p-6">
               <h3 className="text-xl font-bold mb-4">Add a Comment</h3>
               <textarea 
-                className="w-full bg-background-tertiary/50 border border-white/10 rounded-lg p-4 min-h-[100px] mb-4 focus:ring-2 focus:ring-[#7928CA] focus:outline-none"
+                className="w-full bg-background-tertiary/50 border border-white/10 rounded-lg p-4 min-h-[100px] mb-4 focus:ring-2 focus:ring-[#7928CA] focus:outline-none text-white"
                 placeholder="Write your comment here..."
                 value={commentText}
                 onChange={(e) => setCommentText(e.target.value)}
                 disabled={commentMutation.isPending}
+                style={{ color: 'white' }} // Ensure text is white for visibility
               />
               <Button 
                 className="bg-gradient-to-r from-[#FF3370] to-[#7928CA] hover:opacity-90 transition-opacity"
