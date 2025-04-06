@@ -6,11 +6,17 @@ import { TickerBanner } from '@/components/layout/ticker-banner';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Discussion, Comment } from '@shared/schema';
 import { DiscussionCard } from '@/components/forum/discussion-card';
-import { Loader2, ArrowLeft, User } from 'lucide-react';
+import { Loader2, ArrowLeft, User, CheckCircle, XCircle, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { apiRequest } from '@/lib/queryClient';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 
 
@@ -24,6 +30,30 @@ export default function DiscussionDetailPage() {
   const queryClient = useQueryClient();
   
   const discussionId = match ? parseInt(params.id) : null;
+  
+  // Status update mutation for admin
+  const statusUpdateMutation = useMutation({
+    mutationFn: async (status: string) => {
+      if (!discussionId) throw new Error("Discussion ID is required");
+      const res = await apiRequest("PATCH", `/api/discussions/${discussionId}/status`, { status });
+      return await res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [`/api/discussions/${discussionId}`] });
+      queryClient.invalidateQueries({ queryKey: ['/api/discussions'] });
+      toast({
+        title: "Status updated",
+        description: "Discussion status has been updated successfully",
+      });
+    },
+    onError: (error) => {
+      toast({
+        title: "Error",
+        description: `Failed to update status: ${error.message}`,
+        variant: "destructive",
+      });
+    }
+  });
   
   // Comment submission mutation
   const commentMutation = useMutation({
@@ -188,11 +218,64 @@ export default function DiscussionDetailPage() {
             Back to Forum
           </Button>
           
-          <DiscussionCard 
-            discussion={discussion} 
-            index={0} 
-            isDetailView={true} 
-          />
+          <div className="relative">
+            <DiscussionCard 
+              discussion={discussion} 
+              index={0} 
+              isDetailView={true} 
+            />
+            
+            {/* Admin Status Controls */}
+            {currentUser?.isAdmin && (
+              <div className="absolute top-4 right-4">
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button 
+                      variant="outline" 
+                      className="border border-purple-500/50 bg-background/80 hover:bg-purple-900/20"
+                    >
+                      {statusUpdateMutation.isPending ? (
+                        <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                      ) : (
+                        <>
+                          {discussion.status === 'active' && <AlertCircle className="h-4 w-4 text-yellow-400 mr-2" />}
+                          {discussion.status === 'done' && <CheckCircle className="h-4 w-4 text-green-400 mr-2" />}
+                          {discussion.status === 'rejected' && <XCircle className="h-4 w-4 text-red-400 mr-2" />}
+                        </>
+                      )}
+                      {statusUpdateMutation.isPending ? 'Updating...' : 'Update Status'}
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="bg-background-secondary border border-white/10">
+                    <DropdownMenuItem 
+                      className="flex items-center cursor-pointer"
+                      onClick={() => statusUpdateMutation.mutate('active')}
+                      disabled={discussion.status === 'active'}
+                    >
+                      <AlertCircle className="h-4 w-4 text-yellow-400 mr-2" />
+                      <span>Mark as Active</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem 
+                      className="flex items-center cursor-pointer"
+                      onClick={() => statusUpdateMutation.mutate('done')}
+                      disabled={discussion.status === 'done'}
+                    >
+                      <CheckCircle className="h-4 w-4 text-green-400 mr-2" />
+                      <span>Mark as Done</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem 
+                      className="flex items-center cursor-pointer"
+                      onClick={() => statusUpdateMutation.mutate('rejected')}
+                      disabled={discussion.status === 'rejected'}
+                    >
+                      <XCircle className="h-4 w-4 text-red-400 mr-2" />
+                      <span>Mark as Rejected</span>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+            )}
+          </div>
         </div>
         
         <div className="mt-12">

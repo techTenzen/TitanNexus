@@ -11,6 +11,7 @@ import { eq, desc } from "drizzle-orm";
 import connectPg from "connect-pg-simple";
 import postgres from "postgres";
 import createMemoryStore from "memorystore";
+import { hashPassword } from "./password-utils";
 
 const MemoryStore = createMemoryStore(session);
 
@@ -42,6 +43,7 @@ export interface IStorage {
   getAllDiscussions(): Promise<Discussion[]>;
   getTopDiscussions(limit: number): Promise<Discussion[]>;
   upvoteDiscussion(id: number): Promise<Discussion>;
+  updateDiscussionStatus(id: number, status: string): Promise<Discussion>;
   
   // Comments
   createComment(comment: InsertComment): Promise<Comment>;
@@ -118,7 +120,8 @@ export class MemStorage implements IStorage {
       createdAt: now,
       profession: insertUser.profession || null,
       bio: insertUser.bio || null,
-      avatarUrl: insertUser.avatarUrl || null
+      avatarUrl: insertUser.avatarUrl || null,
+      isAdmin: insertUser.isAdmin || false
     };
     this.users.set(id, user);
     
@@ -191,7 +194,8 @@ export class MemStorage implements IStorage {
       upvotes: 0, 
       commentCount: 0,
       createdAt: now,
-      imageUrl: insertDiscussion.imageUrl || null
+      imageUrl: insertDiscussion.imageUrl || null,
+      status: insertDiscussion.status || 'active'
     };
     this.discussions.set(id, discussion);
     
@@ -218,6 +222,17 @@ export class MemStorage implements IStorage {
     }
     
     discussion.upvotes += 1;
+    this.discussions.set(id, discussion);
+    return discussion;
+  }
+  
+  async updateDiscussionStatus(id: number, status: string): Promise<Discussion> {
+    const discussion = this.discussions.get(id);
+    if (!discussion) {
+      throw new Error("Discussion not found");
+    }
+    
+    discussion.status = status;
     this.discussions.set(id, discussion);
     return discussion;
   }
@@ -380,6 +395,22 @@ export class DatabaseStorage implements IStorage {
     return updatedDiscussion;
   }
   
+  async updateDiscussionStatus(id: number, status: string): Promise<Discussion> {
+    const [discussion] = await db.select().from(discussions).where(eq(discussions.id, id));
+    
+    if (!discussion) {
+      throw new Error("Discussion not found");
+    }
+    
+    const [updatedDiscussion] = await db
+      .update(discussions)
+      .set({ status })
+      .where(eq(discussions.id, id))
+      .returning();
+      
+    return updatedDiscussion;
+  }
+  
   // Comments
   async createComment(insertComment: InsertComment): Promise<Comment> {
     const [comment] = await db.insert(comments).values(insertComment).returning();
@@ -460,3 +491,25 @@ export class DatabaseStorage implements IStorage {
 
 // Change to database storage
 export const storage = new DatabaseStorage();
+
+// Create admin user if it doesn't exist
+(async function createAdminIfNotExists() {
+  try {
+    // Check if admin user exists
+    const admin = await storage.getUserByUsername('admin21');
+    
+    if (!admin) {
+      // Create admin user with predefined credentials
+      await storage.createUser({
+        username: 'admin21',
+        email: 'admin@titanai.com',
+        password: await hashPassword('admin123'), // This is a demonstration - in production use a secure password
+        isAdmin: true,
+        profession: 'Platform Administrator'
+      });
+      console.log('Admin user created successfully');
+    }
+  } catch (error) {
+    console.error('Error creating admin user:', error);
+  }
+})();

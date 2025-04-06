@@ -230,6 +230,34 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
+  // Update discussion status (admin only)
+  app.patch("/api/discussions/:id/status", async (req, res) => {
+    if (!req.isAuthenticated()) {
+      return res.status(401).json({ message: "Not authenticated" });
+    }
+    
+    // Check if user is admin
+    if (!req.user.isAdmin) {
+      return res.status(403).json({ message: "Admin privileges required" });
+    }
+    
+    try {
+      const id = Number(req.params.id);
+      const { status } = req.body;
+      
+      // Validate status
+      if (!status || !['active', 'done', 'rejected'].includes(status)) {
+        return res.status(400).json({ message: "Invalid status" });
+      }
+      
+      // Add a updateDiscussionStatus method to storage
+      const updatedDiscussion = await storage.updateDiscussionStatus(id, status);
+      res.json(updatedDiscussion);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to update discussion status" });
+    }
+  });
+  
   // Create HTTP server
   const httpServer = createServer(app);
   

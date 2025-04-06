@@ -96,6 +96,20 @@ export function DiscussionCard({ discussion, index, isDetailView = false }: Disc
     }
   };
   
+  const getStatusColor = (status: string | undefined) => {
+    if (!status) return 'bg-yellow-500/20 text-yellow-400';
+    
+    switch (status.toLowerCase()) {
+      case 'done':
+        return 'bg-green-500/20 text-green-400';
+      case 'rejected':
+        return 'bg-red-500/20 text-red-400';
+      case 'active':
+      default:
+        return 'bg-yellow-500/20 text-yellow-400';
+    }
+  };
+  
   const formatDate = (date: Date) => {
     return formatDistanceToNow(new Date(date), { addSuffix: true });
   };
@@ -153,9 +167,6 @@ export function DiscussionCard({ discussion, index, isDetailView = false }: Disc
                 )}
               </div>
             </div>
-            <span className="text-gray-400 text-sm">
-              Posted {formatDate(discussion.createdAt)}
-            </span>
           </div>
           <Link href={isDetailView ? "#" : `/forum/${discussion.id}`}>
             <div className="block hover:opacity-90 transition-opacity">
@@ -179,9 +190,12 @@ export function DiscussionCard({ discussion, index, isDetailView = false }: Disc
               <MessageSquare className="w-4 h-4 mr-1" />
               <span>{discussion.commentCount ?? 0} comments</span>
             </div>
-            <div className="flex items-center">
+            <div className="flex items-center mr-4">
               <Clock className="w-4 h-4 mr-1" />
-              <span>{(discussion.commentCount ?? 0) > 0 ? 'Active' : 'New'}</span>
+              <span>{formatDate(discussion.createdAt)}</span>
+            </div>
+            <div className={`px-2 py-0.5 text-xs rounded-full ${getStatusColor(discussion.status)}`}>
+              {discussion.status || 'active'}
             </div>
           </div>
         </div>

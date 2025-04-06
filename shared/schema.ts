@@ -12,6 +12,7 @@ export const users = pgTable("users", {
   profession: text("profession"), // Added profession field for community page
   bio: text("bio"),
   avatarUrl: text("avatar_url"),
+  isAdmin: boolean("is_admin").default(false).notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
@@ -35,6 +36,7 @@ export const discussions = pgTable("discussions", {
   description: text("description").notNull(),
   tag: text("tag").notNull(),
   imageUrl: text("image_url"),
+  status: text("status").default("active").notNull(), // possible values: active, done, rejected
   upvotes: integer("upvotes").default(0),
   commentCount: integer("comment_count").default(0),
   createdAt: timestamp("created_at").defaultNow().notNull(),
@@ -99,6 +101,7 @@ export const insertUserSchema = createInsertSchema(users).pick({
   profession: true,
   bio: true,
   avatarUrl: true,
+  isAdmin: true,
 });
 
 export const insertProjectSchema = createInsertSchema(projects).pick({
@@ -115,6 +118,7 @@ export const insertDiscussionSchema = createInsertSchema(discussions).pick({
   description: true,
   tag: true,
   imageUrl: true,
+  status: true,
 });
 
 export const insertCommentSchema = createInsertSchema(comments).pick({
