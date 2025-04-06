@@ -55,21 +55,30 @@ type RegisterFormValues = z.infer<typeof registerSchema>;
 export default function AuthPage() {
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [isRegistering, setIsRegistering] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const { toast } = useToast();
   const [_, navigate] = useLocation();
   
+  // State to keep track of the current user
+  const [currentUser, setCurrentUser] = useState<any>(null);
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
+  
   // Check if user is already logged in
   useEffect(() => {
+    setIsCheckingAuth(true);
     fetch('/api/user')
       .then(res => {
         if (res.ok) return res.json();
         throw new Error('Not authenticated');
       })
       .then(user => {
-        if (user) navigate('/');
+        setCurrentUser(user);
+        setIsCheckingAuth(false);
       })
       .catch(() => {
         // User not logged in, show login page
+        setCurrentUser(null);
+        setIsCheckingAuth(false);
       });
   }, [navigate]);
   
@@ -146,6 +155,100 @@ export default function AuthPage() {
     }
   };
   
+  const onLogout = async () => {
+    try {
+      setIsLoggingOut(true);
+      await apiRequest("POST", "/api/logout");
+      
+      // Update auth state
+      queryClient.setQueryData(["/api/user"], null);
+      queryClient.invalidateQueries({ queryKey: ["/api/user"] });
+      
+      toast({
+        title: "Logout successful",
+        description: "You have been logged out.",
+      });
+      
+      // Force reload the page to reset all states
+      window.location.reload();
+    } catch (error) {
+      toast({
+        title: "Logout failed",
+        description: error instanceof Error ? error.message : "An unknown error occurred",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoggingOut(false);
+    }
+  };
+  
+  // Loading state
+  if (isCheckingAuth) {
+    return (
+      <div className="min-h-screen flex flex-col bg-background text-foreground bg-[radial-gradient(circle_at_10%_20%,rgba(121,40,202,0.1)_0%,transparent_30%),radial-gradient(circle_at_90%_80%,rgba(255,51,112,0.1)_0%,transparent_30%)] bg-grid-pattern">
+        <TickerBanner />
+        <Navbar />
+        <main className="flex-grow flex items-center justify-center">
+          <div className="flex flex-col items-center space-y-4">
+            <div className="h-12 w-12 rounded-full border-4 border-t-transparent border-[#7928CA] animate-spin" />
+            <p className="text-lg font-medium text-white">Checking authentication...</p>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+  
+  // If user is already logged in, show a different UI
+  if (currentUser) {
+    return (
+      <div className="min-h-screen flex flex-col bg-background text-foreground bg-[radial-gradient(circle_at_10%_20%,rgba(121,40,202,0.1)_0%,transparent_30%),radial-gradient(circle_at_90%_80%,rgba(255,51,112,0.1)_0%,transparent_30%)] bg-grid-pattern">
+        <TickerBanner />
+        <Navbar />
+        <main className="flex-grow flex items-center justify-center py-12">
+          <div className="container px-4 md:px-6 max-w-md mx-auto">
+            <Card className="bg-background-secondary/70 backdrop-blur-sm border-white/10">
+              <CardHeader>
+                <CardTitle>Already Logged In</CardTitle>
+                <CardDescription>
+                  You are already logged in as <span className="font-bold">{currentUser.username}</span>
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex flex-col items-center space-y-4">
+                  <div className="w-20 h-20 rounded-full bg-[#7928CA]/20 flex items-center justify-center">
+                    <span className="text-3xl font-bold text-[#7928CA]">{currentUser.username.charAt(0).toUpperCase()}</span>
+                  </div>
+                  <div className="text-center">
+                    <h3 className="text-lg font-medium">{currentUser.username}</h3>
+                    <p className="text-sm text-gray-400">{currentUser.email}</p>
+                  </div>
+                </div>
+                <div className="flex flex-col space-y-3">
+                  <Button 
+                    onClick={() => navigate('/')}
+                    className="bg-gradient-to-r from-[#00EAFF] to-[#7928CA]"
+                  >
+                    Go to Dashboard
+                  </Button>
+                  <Button 
+                    onClick={onLogout}
+                    variant="outline"
+                    disabled={isLoggingOut}
+                  >
+                    {isLoggingOut ? 'Logging out...' : 'Log Out'}
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+  
+  // Normal auth page for non-logged in users
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground bg-[radial-gradient(circle_at_10%_20%,rgba(121,40,202,0.1)_0%,transparent_30%),radial-gradient(circle_at_90%_80%,rgba(255,51,112,0.1)_0%,transparent_30%)] bg-grid-pattern">
       <TickerBanner />

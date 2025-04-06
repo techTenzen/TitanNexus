@@ -4,12 +4,16 @@ import { Menu, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/use-auth';
+import { apiRequest, queryClient } from '@/lib/queryClient';
+import { useToast } from '@/hooks/use-toast';
 
 // Navbar component for all users
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [location] = useLocation();
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const { toast } = useToast();
   
   useEffect(() => {
     const handleScroll = () => {
@@ -19,6 +23,33 @@ export function Navbar() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+  
+  const handleDirectLogout = async () => {
+    try {
+      setIsLoggingOut(true);
+      await apiRequest("POST", "/api/logout");
+      
+      // Update auth state
+      queryClient.setQueryData(["/api/user"], null);
+      queryClient.invalidateQueries({ queryKey: ["/api/user"] });
+      
+      toast({
+        title: "Logout successful",
+        description: "You have been logged out.",
+      });
+      
+      // Force reload the page to reset all states
+      window.location.reload();
+    } catch (error) {
+      toast({
+        title: "Logout failed",
+        description: error instanceof Error ? error.message : "An unknown error occurred",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoggingOut(false);
+    }
+  };
 
   const links = [
     { href: '/', label: 'Home' },
@@ -43,8 +74,8 @@ export function Navbar() {
             <span className="text-gray-300">Hello, {user.username}</span>
             <Button 
               variant="outline" 
-              onClick={() => logoutMutation.mutate()}
-              disabled={logoutMutation.isPending}
+              onClick={handleDirectLogout}
+              disabled={isLoggingOut}
             >
               Sign Out
             </Button>
@@ -96,10 +127,10 @@ export function Navbar() {
           <button 
             className="w-full text-left block px-3 py-2 text-base font-medium text-gray-300 hover:text-white hover:bg-[#7928CA]/10 rounded-md"
             onClick={() => {
-              logoutMutation.mutate();
+              handleDirectLogout();
               setIsOpen(false);
             }}
-            disabled={logoutMutation.isPending}
+            disabled={isLoggingOut}
           >
             Sign Out
           </button>
@@ -223,24 +254,7 @@ export function Navbar() {
               </Link>
             ))}
             <div className="mobile-auth-controls">
-              <div className="mobile-auth-btns">
-                <Link href="/auth">
-                  <span 
-                    className="block px-3 py-2 text-base font-medium text-gray-300 hover:text-white hover:bg-[#7928CA]/10 rounded-md cursor-pointer"
-                    onClick={() => setIsOpen(false)}
-                  >
-                    Sign In
-                  </span>
-                </Link>
-                <Link href="/auth">
-                  <span 
-                    className="block px-3 py-2 text-base font-medium text-gray-300 hover:text-white hover:bg-[#7928CA]/10 rounded-md cursor-pointer"
-                    onClick={() => setIsOpen(false)}
-                  >
-                    Sign Up
-                  </span>
-                </Link>
-              </div>
+              {renderMobileAuthControls()}
             </div>
           </div>
         </div>
