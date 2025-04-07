@@ -1,0 +1,40 @@
+PS E:\projects\SDP\DatabaseAnalytics\DatabaseAnalytics> npm run dev
+
+> rest-express@1.0.0 dev
+> tsx server/index.ts
+
+Using connection string: postgresql://neondb_...
+2:47:55 AM [express] serving on port 5000
+Error creating admin user: TypeError: client.query is not a function
+    at NeonPreparedQuery.execute (E:\projects\SDP\DatabaseAnalytics\DatabaseAnalytics\node_modules\src\neon-serverless\session.ts:102:31)
+    at <anonymous> (E:\projects\SDP\DatabaseAnalytics\DatabaseAnalytics\node_modules\src\pg-core\query-builders\select.ts:1009:27)
+    at Object.startActiveSpan (E:\projects\SDP\DatabaseAnalytics\DatabaseAnalytics\node_modules\src\tracing.ts:27:11)
+    at PgSelectBase.execute (E:\projects\SDP\DatabaseAnalytics\DatabaseAnalytics\node_modules\src\pg-core\query-builders\select.ts:1008:17)
+    at PgSelectBase.then (E:\projects\SDP\DatabaseAnalytics\DatabaseAnalytics\node_modules\src\query-promise.ts:31:15)
+Browserslist: browsers data (caniuse-lite) is 6 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+2:48:17 AM [express] GET /api/user 401 in 3ms :: {"error":"Not authenticated"}
+2:48:17 AM [express] GET /api/user 401 in 1ms :: {"error":"Not authenticated"}
+2:48:17 AM [express] GET /api/stats 500 in 5ms :: {"message":"Failed to fetch stats"}
+2:48:17 AM [express] GET /api/projects/top 500 in 3ms :: {"message":"Failed to fetch top projects"}
+2:48:17 AM [express] GET /api/discussions/top 500 in 3ms :: {"message":"Failed to fetch top discussi…
+2:48:23 AM [express] GET /api/user 401 in 1ms :: {"error":"Not authenticated"}
+2:48:23 AM [express] GET /api/user 401 in 1ms :: {"error":"Not authenticated"}
+2:48:33 AM [express] POST /api/login 500 in 2ms :: {"message":"client.query is not a function"}
+TypeError: client.query is not a function
+    at NeonPreparedQuery.execute (E:\projects\SDP\DatabaseAnalytics\DatabaseAnalytics\node_modules\src\neon-serverless\session.ts:102:31)
+    at <anonymous> (E:\projects\SDP\DatabaseAnalytics\DatabaseAnalytics\node_modules\src\pg-core\query-builders\select.ts:1009:27)
+    at Object.startActiveSpan (E:\projects\SDP\DatabaseAnalytics\DatabaseAnalytics\node_modules\src\tracing.ts:27:11)
+    at PgSelectBase.execute (E:\projects\SDP\DatabaseAnalytics\DatabaseAnalytics\node_modules\src\pg-core\query-builders\select.ts:1008:17)
+    at PgSelectBase.then (E:\projects\SDP\DatabaseAnalytics\DatabaseAnalytics\node_modules\src\query-promise.ts:31:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+2:49:27 AM [express] POST /api/login 500 in 2ms :: {"message":"client.query is not a function"}
+TypeError: client.query is not a function
+    at NeonPreparedQuery.execute (E:\projects\SDP\DatabaseAnalytics\DatabaseAnalytics\node_modules\src\neon-serverless\session.ts:102:31)
+    at <anonymous> (E:\projects\SDP\DatabaseAnalytics\DatabaseAnalytics\node_modules\src\pg-core\query-builders\select.ts:1009:27)
+    at Object.startActiveSpan (E:\projects\SDP\DatabaseAnalytics\DatabaseAnalytics\node_modules\src\tracing.ts:27:11)
+    at PgSelectBase.execute (E:\projects\SDP\DatabaseAnalytics\DatabaseAnalytics\node_modules\src\pg-core\query-builders\select.ts:1008:17)
+    at PgSelectBase.then (E:\projects\SDP\DatabaseAnalytics\DatabaseAnalytics\node_modules\src\query-promise.ts:31:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+

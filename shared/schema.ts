@@ -24,6 +24,8 @@ export const projects = pgTable("projects", {
   description: text("description").notNull(),
   techStack: text("tech_stack").array(),
   coverImageUrl: text("cover_image_url"),
+  category: text("category").default("AI Development"),
+  githubRepo: text("github_repo"),
   upvotes: integer("upvotes").default(0),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
@@ -109,6 +111,8 @@ export const insertProjectSchema = createInsertSchema(projects).pick({
   title: true,
   description: true,
   techStack: true,
+  category: true,
+  githubRepo: true,
   coverImageUrl: true,
 });
 

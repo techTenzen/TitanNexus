@@ -8,7 +8,7 @@ import DiscussionDetailPage from "@/pages/discussion-detail-page";
 import ProjectsPage from "@/pages/projects-page";
 import DocumentationPage from "@/pages/documentation-page";
 import { ProtectedRoute } from "./lib/protected-route";
-
+import ProjectDetailPage from "@/pages/project-detail-page";
 function Router() {
   return (
     <Switch>
@@ -18,6 +18,7 @@ function Router() {
       <Route path="/forum/:id" component={DiscussionDetailPage} />
       <Route path="/projects" component={ProjectsPage} />
       <Route path="/documentation" component={DocumentationPage} />
+        <Route path="/projects/:id" component={ProjectDetailPage} />
       <Route component={NotFound} />
     </Switch>
   );

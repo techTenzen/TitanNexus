@@ -14,13 +14,14 @@ declare global {
 
 export function setupAuth(app: Express) {
   const sessionSettings: session.SessionOptions = {
-    secret: process.env.SESSION_SECRET || "titan-ai-community-session-secret",
+    secret: process.env.SESSION_SECRET || "nexus",
     resave: false,
     saveUninitialized: false,
     store: storage.sessionStore,
     cookie: {
-      secure: process.env.NODE_ENV === "production",
-      maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
+      secure: false, // Set to true only if using HTTPS
+      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+      sameSite: 'lax'
     }
   };
 
@@ -30,52 +31,59 @@ export function setupAuth(app: Express) {
   app.use(passport.session());
 
   passport.use(
-    new LocalStrategy(async (username, password, done) => {
-      try {
-        const user = await storage.getUserByUsername(username);
-        
-        if (!user || !(await comparePasswords(password, user.password))) {
-          return done(null, false, { message: "Invalid username or password" });
-        } else {
-          const { password: _, ...userWithoutPassword } = user;
-          return done(null, userWithoutPassword);
+      new LocalStrategy(async (username, password, done) => {
+        try {
+          const user = await storage.getUserByUsername(username);
+
+          if (!user || !(await comparePasswords(password, user.password))) {
+            return done(null, false, { message: "Invalid username or password" });
+          } else {
+            const { password: _, ...userWithoutPassword } = user;
+            return done(null, userWithoutPassword);
+          }
+        } catch (err) {
+          console.error("LocalStrategy error:", err);
+          return done(err);
         }
-      } catch (err) {
-        return done(err);
-      }
-    }),
+      }),
   );
 
-  passport.serializeUser((user: Express.User, done) => done(null, user.id));
-  
+  // Update serialize/deserialize functions to handle possible undefined results
+  passport.serializeUser((user: Express.User, done) => {
+    if (user && user.id) done(null, user.id);
+    else {
+      console.error("Serialization error: User or user ID is undefined", user);
+      done(new Error("User is undefined"), null);
+    }
+  });
+
   passport.deserializeUser(async (id: number, done) => {
     try {
       const user = await storage.getUser(id);
-      
+
       if (!user) {
+        console.error("Deserialization error: User not found for ID", id);
         return done(null, false);
       }
-      
+
       const { password: _, ...userWithoutPassword } = user;
       done(null, userWithoutPassword);
     } catch (err) {
-      done(err);
+      console.error("Deserialization error:", err);
+      done(err, null);
     }
   });
 
   app.post("/api/register", async (req, res, next) => {
     try {
       const { username, email, password } = req.body;
-      
+
       // Check if username already exists (usernames must be unique)
       const existingUsername = await storage.getUserByUsername(username);
       if (existingUsername) {
         return res.status(400).json({ error: "Username already exists" });
       }
-      
-      // Email doesn't need to be unique - allow multiple accounts with same email
-      // but different usernames
-      
+
       // Create user with hashed password
       const hashedPassword = await hashPassword(password);
       const user = await storage.createUser({
@@ -85,27 +93,34 @@ export function setupAuth(app: Express) {
         bio: null,
         avatarUrl: null
       });
-      
+
       // Remove password from response
       const { password: _, ...userWithoutPassword } = user;
-      
+
       // Log user in
       req.login(userWithoutPassword, (err) => {
         if (err) return next(err);
         res.status(201).json(userWithoutPassword);
       });
     } catch (err) {
+      console.error("Registration error:", err);
       next(err);
     }
   });
 
   app.post("/api/login", (req, res, next) => {
     passport.authenticate("local", (err, user, info) => {
-      if (err) return next(err);
-      if (!user) return res.status(401).json({ error: info.message || "Invalid login" });
-      
+      if (err) {
+        console.error("Login error:", err);
+        return next(err);
+      }
+      if (!user) return res.status(401).json({ error: info?.message || "Invalid login" });
+
       req.login(user, (err) => {
-        if (err) return next(err);
+        if (err) {
+          console.error("Login session error:", err);
+          return next(err);
+        }
         return res.json(user);
       });
     })(req, res, next);
