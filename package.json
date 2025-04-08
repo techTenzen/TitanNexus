@@ -5,13 +5,12 @@
   "license": "MIT",
   "scripts": {
     "dev": "tsx server/index.ts",
-    "build": "vite build && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist",
-    "start": "NODE_ENV=production node dist/index.js",
+    "build": "vite build && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist/server",
+    "start": "NODE_ENV=production node dist/server/index.js",
     "check": "tsc",
     "drizzle:generate": "drizzle-kit generate",
     "drizzle:push": "drizzle-kit push"
   },
-
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",
     "@jridgewell/trace-mapping": "^0.3.25",
@@ -84,6 +83,7 @@
     "@replit/vite-plugin-runtime-error-modal": "^0.0.3",
     "@tailwindcss/typography": "^0.5.15",
     "@types/connect-pg-simple": "^7.0.3",
+    "@types/cors": "^2.8.17",
     "@types/express": "4.17.21",
     "@types/express-session": "^1.18.0",
     "@types/node": "20.16.11",
