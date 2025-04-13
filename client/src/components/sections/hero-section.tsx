@@ -93,6 +93,18 @@ createReactComponent().then(code => {
               initial="hidden"
               animate="visible"
           >
+            <div className="inline-flex items-center justify-center px-4 py-1 mb-4 rounded-full text-sm font-medium text-[#6f3fc9] bg-[#f3e8ff] animate-fade-in">
+              <span className="mr-2 text-[#6f3fc9] text-base">●</span>
+              <a
+                  href="https://titan1.pages.dev/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:underline"
+              >
+                Just released: Titan AI 2.0 with multi-model support
+              </a>
+            </div>
+
             <motion.h1
                 className="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight tracking-tight"
                 variants={itemVariants}
