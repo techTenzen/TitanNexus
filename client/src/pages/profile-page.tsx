@@ -104,6 +104,8 @@ export default function ProfilePage() {
         }
     });
 
+    // In the userDiscussions query in your ProfilePage component, modify it to fetch comment counts:
+
     const { data: userDiscussions, isLoading: isLoadingDiscussions } = useQuery({
         queryKey: ['userDiscussions', profileData?.id],
         enabled: !!profileData?.id,
@@ -111,7 +113,26 @@ export default function ProfilePage() {
             // Get all discussions and filter by user ID
             const res = await apiRequest('GET', '/api/discussions');
             const discussions = await res.json();
-            return discussions.filter(discussion => discussion.userId === profileData.id);
+            const filteredDiscussions = discussions.filter(discussion => discussion.userId === profileData.id);
+
+            // Fetch comment counts for each discussion
+            const discussionsWithComments = await Promise.all(
+                filteredDiscussions.map(async (discussion) => {
+                    try {
+                        const commentsRes = await apiRequest('GET', `/api/discussions/${discussion.id}/comments`);
+                        const comments = await commentsRes.json();
+                        return {
+                            ...discussion,
+                            commentsCount: Array.isArray(comments) ? comments.length : 0
+                        };
+                    } catch (error) {
+                        console.error(`Failed to fetch comments for discussion ${discussion.id}:`, error);
+                        return discussion; // Keep original if fetch fails
+                    }
+                })
+            );
+
+            return discussionsWithComments;
         }
     });
 
@@ -383,7 +404,7 @@ export default function ProfilePage() {
                                                     style={{ backgroundImage: `url(${defaultDiscussionBackground})` }}
                                                 >
                                                     <div className="p-6 backdrop-blur-sm">
-                                                        <Link href={`/discussions/${discussion.id}`}>
+                                                        <Link href={`/forum/${discussion.id}`}>
                                                             <h3 className="text-lg font-semibold text-white hover:text-[#00EAFF] transition-colors">
                                                                 {discussion.title}
                                                             </h3>

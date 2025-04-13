@@ -38,12 +38,22 @@ export default function DiscussionDetailPage() {
       const res = await apiRequest("PATCH", `/api/discussions/${discussionId}/status`, { status });
       return await res.json();
     },
+    // In your DiscussionDetailPage component, modify the commentMutation.onSuccess callback:
+
     onSuccess: () => {
+      setCommentText("");
+      // Invalidate individual discussion
+      queryClient.invalidateQueries({ queryKey: [`/api/discussions/${discussionId}/comments`] });
       queryClient.invalidateQueries({ queryKey: [`/api/discussions/${discussionId}`] });
+
+      // Also invalidate the user discussions list that's shown on profile
+      queryClient.invalidateQueries({ queryKey: ['/api/user/discussions'] });
+      // If you have other queries for discussions lists, invalidate those too
       queryClient.invalidateQueries({ queryKey: ['/api/discussions'] });
+
       toast({
-        title: "Status updated",
-        description: "Discussion status has been updated successfully",
+        title: "Comment posted",
+        description: "Your comment has been posted successfully",
       });
     },
     onError: (error) => {
@@ -329,13 +339,16 @@ export default function DiscussionDetailPage() {
           {currentUser && (
             <div className="mt-8 bg-background-secondary/70 backdrop-blur-sm border border-white/10 rounded-xl p-6">
               <h3 className="text-xl font-bold mb-4">Add a Comment</h3>
-              <textarea 
-                className="w-full bg-background-tertiary/50 border border-white/10 rounded-lg p-4 min-h-[100px] mb-4 focus:ring-2 focus:ring-[#7928CA] focus:outline-none text-white"
-                placeholder="Write your comment here..."
-                value={commentText}
-                onChange={(e) => setCommentText(e.target.value)}
-                disabled={commentMutation.isPending}
-                style={{ color: 'white' }} // Ensure text is white for visibility
+              <textarea
+                  className="w-full bg-background-tertiary/50 border border-white/10 rounded-lg p-4 min-h-[100px] mb-4 focus:ring-2 focus:ring-[#7928CA] focus:outline-none text-white"
+                  placeholder="Write your comment here..."
+                  value={commentText}
+                  onChange={(e) => setCommentText(e.target.value)}
+                  disabled={commentMutation.isPending}
+                  style={{
+                    color: 'white',
+                    backgroundColor: 'rgba(13, 13, 30, 0.7)'  // Darker background for contrast
+                  }}
               />
               <Button 
                 className="bg-gradient-to-r from-[#FF3370] to-[#7928CA] hover:opacity-90 transition-opacity"

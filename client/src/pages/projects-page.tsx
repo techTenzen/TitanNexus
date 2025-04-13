@@ -74,32 +74,42 @@ export default function ProjectsPage() {
           ) : (
             <>
               {/* Search and filter controls */}
-              <motion.div 
-                className="flex flex-col md:flex-row gap-4 mb-8"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3 }}
-              >
-                <div className="flex-1">
-                  <Input 
-                    placeholder="Search projects by title, description or tech stack..." 
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full bg-background-secondary/70 border-white/10"
-                  />
-                </div>
-                <div className="w-full md:w-48">
-                  <Select defaultValue={sortOption} onValueChange={setSortOption}>
-                    <SelectTrigger className="bg-background-secondary/70 border-white/10">
-                      <SelectValue placeholder="Sort by" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="upvotes">Most Upvoted</SelectItem>
-                      <SelectItem value="newest">Newest First</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </motion.div>
+                <motion.div
+                    className="flex flex-col md:flex-row gap-4 mb-8"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3 }}
+                >
+                    <div className="flex-1">
+                        <Input
+                            placeholder="Search projects by title, description or tech stack..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            className="w-full border-white/10"
+                            style={{
+                                backgroundColor: 'rgba(13, 13, 30, 0.7)',
+                                color: 'white'
+                            }}
+                        />
+                    </div>
+                    <div className="w-full md:w-48">
+                        <Select defaultValue={sortOption} onValueChange={setSortOption}>
+                            <SelectTrigger
+                                className="border-white/10"
+                                style={{
+                                    backgroundColor: 'rgba(13, 13, 30, 0.7)',
+                                    color: 'white'
+                                }}
+                            >
+                                <SelectValue placeholder="Sort by" />
+                            </SelectTrigger>
+                            <SelectContent style={{ backgroundColor: 'rgba(20, 20, 40, 0.95)' }}>
+                                <SelectItem value="upvotes">Most Upvoted</SelectItem>
+                                <SelectItem value="newest">Newest First</SelectItem>
+                            </SelectContent>
+                        </Select>
+                    </div>
+                </motion.div>
 
               {/* Projects grid */}
               {isLoading ? (

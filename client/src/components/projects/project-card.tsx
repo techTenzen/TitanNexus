@@ -157,42 +157,45 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
             <span className="text-xs">{project.category || "AI Development"}</span>
           </div>
 
-          <div className="flex justify-between items-center">
-            <div className="flex items-center">
-              {isLoadingUser ? (
-                  <Skeleton className="w-6 h-6 rounded-full mr-2" />
-              ) : (
-                  <img
-                      src={creator.avatarUrl}
-                      alt="Avatar"
-                      className="w-6 h-6 rounded-full mr-2"
-                      onError={(e) => {
-                        e.currentTarget.src = 'https://ui-avatars.com/api/?name=User&background=random';
-                      }}
-                  />
-              )}
-              <div className="flex flex-col">
-                <span className="text-xs text-gray-400">{creator.username}</span>
-                {creator.profession && (
-                    <span className="text-xs text-gray-500">{creator.profession}</span>
-                )}
-              </div>
-            </div>
+          {isLoadingUser ? (
+              // Loading state placeholder
+              <div className="animate-pulse rounded-full bg-gray-200 h-10 w-10"></div>
+          ) : (
+              <img
+                  src={creator.avatar || "/favicon.png"}
+                  alt={`${creator.username}'s avatar`}
+                  className="rounded-full h-10 w-10 object-cover"
+                  onError={(e) => {
+                    e.currentTarget.src = "/favicon.png";
+                  }}
+              />
+          )}
+
+          <div className="ml-2">
+            <p className="font-medium">{creator.username}</p>
+            {creator.profession && (
+                <p className="text-sm text-gray-600">{creator.profession}</p>
+            )}
+          </div>
+
+          <div className="mt-4">
             {project.githubRepo ? (
                 <a
                     href={project.githubRepo}
+                    className="inline-flex items-center px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-[#00EAFF] hover:text-[#7928CA] text-sm"
                 >
                   Visit Project
                 </a>
             ) : (
-                <Link href={`/projects/${project.id}`}>
-                  <a className="text-[#00EAFF] hover:text-[#7928CA] text-sm">View Details</a>
-                </Link>
+                <a
+                    href={`/projects/${project.id}`}
+                    className="inline-flex items-center px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300"
+                >
+                  View Details
+                </a>
             )}
-
           </div>
         </div>
       </motion.div>
