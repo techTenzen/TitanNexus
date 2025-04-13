@@ -3,8 +3,6 @@
   <h1>Titan AI</h1>
   <p><strong>The Next-Generation AI-Powered Development Platform</strong></p>
   
- 
-  
   <p>
     <a href="#installation"><strong>Installation</strong></a> •
     <a href="#features"><strong>Features</strong></a> •
@@ -37,155 +35,149 @@ await titan.deploy(project);
 
 ## ✨ Features
 
-### 🧠 Multi-Model Prompting
-Switch seamlessly between GPT-4, Claude, and Mistral to leverage the unique strengths of each model. Use GPT-4 for complex reasoning, Claude for long-context tasks, and Mistral for speed-optimized workflows.
+### 🧠 Multi-Model Integration
+Choose from multiple LLM providers including OpenAI, Anthropic, Gemini, Mistral, xAI, Groq, and more. Select the best model for your specific task - use GPT-4 for complex reasoning, Claude for long-context tasks, and Mistral for speed-optimized workflows.
 
-### 💻 WebContainer Runtime Environment
-Run full-stack Node.js applications directly in your browser. No server required. Install npm packages, run build tools, and test your applications in a virtualized environment.
+### 💻 Browser-Based Development Environment
+Run full-stack Node.js applications directly in your browser using WebContainer technology. No local setup required - install npm packages, run build tools, and test your applications in a virtualized environment.
 
-### 🛠️ AI-Based Error Detection & Recovery
+### 🛠️ Intelligent Error Detection & Recovery
 Automatically detect and fix errors in your code. Titan AI monitors terminal output, identifies issues, and generates fixes without manual intervention.
 
-### 📝 Prompt Parsing & File Injection
+### 📝 Project Generation from Natural Language
 Convert natural language descriptions into complete project structures. Titan AI creates directories, files, and configurations based on your description.
 
-### 🖥️ Integrated Terminal & Logs
-Access a full-featured terminal directly in your browser. Run commands, view logs, and execute build tools in real-time.
+### 🖥️ Integrated Terminal & Preview
+Access a full-featured terminal directly in your browser. Run commands, view logs, and see your application in real-time with the built-in preview window.
 
-### 📁 File System Architecture
-Work with a complete virtual file system that persists across sessions. Create, edit, and organize files just like in a traditional development environment.
+### 📁 Complete File System Management
+Work with a persistent virtual file system. Create, edit, and organize files just like in a traditional development environment.
 
-### 🔄 Model Switching with Context Retention
-Switch between AI models while maintaining conversation history and project context. Optimize your workflow by choosing the right model for each task.
+### 🔄 Version Control & Rollback
+Revert to earlier versions of your code and track changes throughout your development process.
 
-### 🌐 API Calls & External Fetch Integration
-Test API calls directly in the sandbox environment. Work with real external services or use mock responses for development.
+### 🌐 Seamless Deployment Options
+Deploy your projects directly to platforms like GitHub or Netlify with just a few clicks, or download as a ZIP file for local use.
 
 ## ⚡ Quickstart
 
 ### Installation
 
 ```bash
-# Using npm
-npm install titan-ai
-
-# Using yarn
-yarn add titan-ai
-
-# Using pnpm
-pnpm add titan-ai
-```
-
-### Basic Usage
-
-```javascript
-import { TitanAI } from 'titan-ai';
-
-// Initialize Titan AI
-const titan = new TitanAI({
-  defaultModel: 'gpt-4',
-  apiKey: process.env.TITAN_API_KEY
-});
-
-// Create a new project from a description
-const project = await titan.createProject(
-  `Create a React application that fetches data from a REST API
-   and displays it in a responsive dashboard with sorting and filtering.`
-);
-
-// Preview the generated files
-console.log(project.files);
-
-// Run the project in a WebContainer
-const container = await titan.createWebContainer(project);
-await container.run('npm install && npm start');
-
-// Get the preview URL
-const url = container.getPreviewUrl(); // http://localhost:3000
-```
-
-## 📚 Documentation
-
-For comprehensive documentation, visit [titan-ai.dev/docs](https://titan-ai.dev/docs).
-
-### Core Concepts
-
-- **Multi-Model Prompting**: [titan-ai.dev/docs/multi-model][(https://titan-ai.dev/docs/multi-model](https://titannexus-production.up.railway.app/documentation))
-- **WebContainer Runtime**: [titan-ai.dev/docs/webcontainer]([https://titan-ai.dev/docs/webcontainer](https://titannexus-production.up.railway.app/documentation))
-- **Error Detection & Recovery**: [titan-ai.dev/docs/error-detection]([https://titan-ai.dev/docs/error-detection](https://titannexus-production.up.railway.app/documentation))
-- **Prompt Parsing**: [titan-ai.dev/docs/prompt-parsing]([https://titan-ai.dev/docs/prompt-parsing](https://titannexus-production.up.railway.app/documentation))
-- **Integrated Terminal**: [titan-ai.dev/docs/integrated-terminal]([https://titan-ai.dev/docs/integrated-terminal](https://titannexus-production.up.railway.app/documentation))
-- **File System Architecture**: [titan-ai.dev/docs/filesystem]([https://titan-ai.dev/docs/filesystem](https://titannexus-production.up.railway.app/documentation))
-- **Model Switching**: [titan-ai.dev/docs/model-switching]([https://titan-ai.dev/docs/model-switching](https://titannexus-production.up.railway.app/documentation))
-- **API Integration**: [titan-ai.dev/docs/api-integration](https://titannexus-production.up.railway.app/documentation)
-
-## 🔧 API Reference
-
-```javascript
-// Create a new project
-const project = await titan.createProject(prompt, options);
-
-// Create a WebContainer environment
-const container = await titan.createWebContainer(options);
-
-// Execute code in the container
-await container.execute(code);
-
-// Run terminal commands
-const terminal = container.createTerminal();
-await terminal.run('npm install');
-
-// Work with the file system
-await container.fs.writeFile('/app/src/index.js', content);
-```
-
-## 🌟 Community & Support
-
-- **Discord**: Join our [Discord community](https://discord.gg/titanai)
-- **Twitter**: Follow us [@TitanAI](https://twitter.com/titanai)
-- **GitHub Discussions**: [github.com/titan-ai/titan/discussions](https://github.com/titan-ai/titan/discussions)
-- **Stack Overflow**: Tag your questions with [titan-ai](https://stackoverflow.com/questions/tagged/titan-ai)
-
-## 🤝 Contributing
-
-We welcome contributions from the community! See our [Contributing Guidelines](CONTRIBUTING.md) for details on how to get started.
-
-### Development Setup
-
-```bash
 # Clone the repository
 git clone https://github.com/titan-ai/titan.git
 cd titan
 
-# Install dependencies
+# Using npm
+npm install
+
+# Using pnpm (recommended)
 pnpm install
 
 # Start the development server
-pnpm dev
+pnpm run dev
 ```
 
-## 📋 Roadmap
+### Docker Installation
 
-- [x] Multi-model support
-- [x] WebContainer integration
-- [x] Error detection and recovery
-- [x] File system architecture
-- [ ] Visual component editor
-- [ ] Database integration
-- [ ] Collaborative editing
-- [ ] Plugin system
+```bash
+# Build the Docker image
+docker build . --target titan-ai-development
+
+# Run the container
+docker compose --profile development up
+```
+
+## 📚 Documentation
+
+For comprehensive documentation, visit our [documentation portal](https://titannexus-production.up.railway.app/documentation).
+
+Our documentation covers:
+
+- Setting up your API keys for different providers
+- Configuring custom base URLs for local models
+- Creating and managing projects
+- Using the integrated terminal
+- Deploying your applications
+- Advanced features and tips
+
+## 🔧 Configuring API Keys and Providers
+
+### Adding Your API Keys
+Setting up your API keys in Titan AI is straightforward:
+
+1. Open the home page (main interface)
+2. Select your desired provider from the dropdown menu
+3. Click the pencil (edit) icon
+4. Enter your API key in the secure input field
+
+### Configuring Custom Base URLs
+For providers that support custom base URLs (such as Ollama or LM Studio):
+
+1. Click the settings icon in the sidebar
+2. Navigate to the "Providers" tab
+3. Search for your provider
+4. Enter your custom base URL in the designated field
+
+## 🌟 Community & Support
+
+Join our growing community:
+
+- **Website**: [https://titannexus-production.up.railway.app/](https://titannexus-production.up.railway.app/)
+- **Discord**: Join our Discord community (coming soon)
+- **GitHub Issues**: Report bugs or request features through our issue tracker
+
+## 🛣️ Roadmap
+
+### Completed
+- ✅ Multi-model support
+- ✅ OpenRouter Integration
+- ✅ Gemini Integration
+- ✅ Download project as ZIP
+- ✅ File synchronization
+- ✅ Docker containerization
+- ✅ GitHub integration
+- ✅ API key management through UI
+- ✅ Terminal integration
+- ✅ Code version history
+- ✅ Streaming code output
+- ✅ Git clone functionality
+- ✅ Mobile responsive design
+- ✅ Image attachment support
+- ✅ Template options
+
+### High Priority
+- ⬜ Performance optimization for file handling
+- ⬜ Improved prompting for smaller LLMs
+- ⬜ Backend agent architecture
+- ⬜ Visual component editor
+- ⬜ Database integration
+- ⬜ Collaborative editing
+
+### Planned
+- ⬜ Supabase Integration
+- ⬜ Project planning with Markdown
+- ⬜ VSCode Integration
+- ⬜ Document upload for reference
+- ⬜ Voice prompting
+- ⬜ Additional cloud provider integrations
+
+## 🤝 Contributing
+
+We welcome contributions! Here's how to get started:
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
 ## 📜 License
 
-Titan AI is licensed under the [MIT License](LICENSE).
+Titan AI is licensed under the MIT License. However, please note that it uses WebContainers API that requires licensing for production usage in a commercial, for-profit setting.
 
 ---
 
 <div align="center">
   <p>Built with ❤️ by the Titan AI team and contributors worldwide</p>
-  <p>
-    <a href="https://github.com/titan-ai/titan/graphs/contributors">
-      <img src="https://via.placeholder.com/800x100" alt="Contributors" width="800">
-    </a>
-  </p>
 </div>
