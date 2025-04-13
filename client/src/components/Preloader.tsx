@@ -10,170 +10,90 @@ const Preloader = ({ onComplete }: PreloaderProps) => {
     const taglineRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        // Import libraries
-        const loadLibraries = async () => {
-            // Import GSAP properly
-            const gsap = await import('gsap');
+        // Text animation for main header
+        if (mainHeaderRef.current) {
+            const textWrapper = mainHeaderRef.current;
+            textWrapper.innerHTML = textWrapper.textContent?.replace(
+                /\S/g,
+                "<span class='letter'>$&</span>"
+            ) || '';
+        }
 
-            // Try different import approaches for anime.js
-            let anime;
-            try {
-                // Try standard import first
-                const animeModule = await import('animejs');
-                anime = animeModule.default;
-            } catch (err) {
-                console.error("Error importing anime.js:", err);
-                // If that fails, fallback to CDN
-                const script = document.createElement('script');
-                script.src = 'https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js';
-                script.async = true;
-                document.body.appendChild(script);
+        // Define our animation sequences using standard DOM manipulation and CSS
+        const animateHeader = () => {
+            const letters = document.querySelectorAll('.main-header .letter');
 
-                // Wait for script to load
-                await new Promise((resolve) => {
-                    script.onload = resolve;
-                });
+            // Animate the letters in sequence
+            letters.forEach((letter, index) => {
+                setTimeout(() => {
+                    (letter as HTMLElement).style.opacity = '1';
+                    (letter as HTMLElement).style.transform = 'translateY(0)';
+                }, 5800 + (index * 20));
+            });
 
-                // Use the global anime object
-                anime = (window as any).anime;
-            }
-
-            // Increased animation speed by reducing durations and delays
-            gsap.gsap.fromTo(
-                ".titles > div",
-                {
-                    x: "-60",
-                    opacity: 0
-                },
-                {
-                    x: "0",
-                    opacity: 1,
-                    duration: 0.5,
-                    ease: "power3.inOut",
-                    stagger: 1
-                }
-            );
-
-            gsap.gsap.to(
-                ".titles > div",
-                {
-                    x: "60",
-                    opacity: 0,
-                    duration: 0.5,
-                    ease: "power3.inOut",
-                    delay: 0.8,
-                    stagger: 1
-                }
-            );
-
-            gsap.gsap.fromTo(
-                "li.block",
-                { x: "-1600" },
-                {
-                    x: "0",
-                    duration: 2,
-                    delay: 2.5,
-                    ease: "expo.inOut",
-                    stagger: 0.12
-                }
-            );
-
-            gsap.gsap.to(
-                "li.block",
-                {
-                    x: "1600",
-                    duration: 2,
-                    delay: 4.5,
-                    ease: "expo.inOut",
-                    stagger: 0.12
-                }
-            );
-
-            // Text animation for main header
-            if (mainHeaderRef.current) {
-                const textWrapper = mainHeaderRef.current;
-                textWrapper.innerHTML = textWrapper.textContent?.replace(
-                    /\S/g,
-                    "<span class='letter'>$&</span>"
-                ) || '';
-            }
-
-            // Main header animation
-            if (anime) {
-                anime.timeline().add({
-                    targets: ".main-header .letter",
-                    opacity: [0, 1],
-                    translateY: [60, 0],
-                    translateZ: 0,
-                    easing: "easeOutExpo",
-                    duration: 1500,
-                    delay: (el: any, i: number) => 5800 + 20 * i,
-                });
-
-                // Main header fade out when tagline comes in
-                anime.timeline().add({
-                    targets: ".main-header",
-                    opacity: [1, 0.1],
-                    easing: "easeOutExpo",
-                    duration: 1000,
-                    delay: 7200
-                });
-
-                // Tagline animation - fade in after main header
-                anime.timeline().add({
-                    targets: ".tagline",
-                    opacity: [0, 1],
-                    translateY: [20, 0],
-                    easing: "easeOutExpo",
-                    duration: 1000,
-                    delay: 7300
-                });
-            } else {
-                // Fallback to GSAP for text animation if anime.js is not available
-                gsap.gsap.fromTo(
-                    ".main-header .letter",
-                    { opacity: 0, y: 60 },
-                    {
-                        opacity: 1,
-                        y: 0,
-                        duration: 1.5,
-                        ease: "expo.out",
-                        stagger: 0.02,
-                        delay: 5.8
-                    }
-                );
-
-                // Main header fade out
-                gsap.gsap.to(
-                    ".main-header",
-                    {
-                        opacity: 0.1,
-                        duration: 1,
-                        ease: "expo.out",
-                        delay: 7.2
-                    }
-                );
-
-                gsap.gsap.fromTo(
-                    ".tagline",
-                    { opacity: 0, y: 20 },
-                    {
-                        opacity: 1,
-                        y: 0,
-                        duration: 1,
-                        ease: "expo.out",
-                        delay: 7.3
-                    }
-                );
-            }
-
-            // Complete preloader after animations
+            // Fade out the main header after animation completes
             setTimeout(() => {
-                onComplete();
-            }, 10000);
+                if (mainHeaderRef.current) {
+                    mainHeaderRef.current.style.opacity = '0.1';
+                }
+            }, 7200);
+
+            // Animate in the tagline
+            setTimeout(() => {
+                if (taglineRef.current) {
+                    taglineRef.current.style.opacity = '1';
+                    taglineRef.current.style.transform = 'translateY(0)';
+                }
+            }, 7300);
         };
 
-        loadLibraries();
+        const animateBlocks = () => {
+            const animateTitles = () => {
+                const titleDivs = document.querySelectorAll('.titles > div');
+
+                // Animate in
+                titleDivs.forEach((div, index) => {
+                    setTimeout(() => {
+                        (div as HTMLElement).style.transform = 'translateX(0)';
+                        (div as HTMLElement).style.opacity = '1';
+                    }, index * 1000);
+
+                    // Animate out
+                    setTimeout(() => {
+                        (div as HTMLElement).style.transform = 'translateX(60px)';
+                        (div as HTMLElement).style.opacity = '0';
+                    }, 800 + index * 1000);
+                });
+            };
+
+            const animateColorBlocks = () => {
+                const blocks = document.querySelectorAll('li.block');
+
+                // Animate in
+                blocks.forEach((block, index) => {
+                    setTimeout(() => {
+                        (block as HTMLElement).style.transform = 'translateX(0)';
+                    }, 2500 + index * 120);
+
+                    // Animate out
+                    setTimeout(() => {
+                        (block as HTMLElement).style.transform = 'translateX(1600px)';
+                    }, 4500 + index * 120);
+                });
+            };
+
+            animateTitles();
+            animateColorBlocks();
+        };
+
+        // Start animations
+        animateBlocks();
+        animateHeader();
+
+        // Complete preloader after animations
+        setTimeout(() => {
+            onComplete();
+        }, 10000);
     }, [onComplete]);
 
     return (
