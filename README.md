@@ -3,13 +3,7 @@
   <h1>Titan AI</h1>
   <p><strong>The Next-Generation AI-Powered Development Platform</strong></p>
   
-  <p>
-    <a href="#"><img src="https://img.shields.io/github/stars/titan-ai/titan?style=for-the-badge" alt="Stars"></a>
-    <a href="#"><img src="https://img.shields.io/github/forks/titan-ai/titan?style=for-the-badge" alt="Forks"></a>
-    <a href="#"><img src="https://img.shields.io/github/issues/titan-ai/titan?style=for-the-badge" alt="Issues"></a>
-    <a href="#"><img src="https://img.shields.io/npm/v/titan-ai?style=for-the-badge" alt="Version"></a>
-    <a href="#"><img src="https://img.shields.io/github/license/titan-ai/titan?style=for-the-badge" alt="License"></a>
-  </p>
+ 
   
   <p>
     <a href="#installation"><strong>Installation</strong></a> •
@@ -116,14 +110,14 @@ For comprehensive documentation, visit [titan-ai.dev/docs](https://titan-ai.dev/
 
 ### Core Concepts
 
-- **Multi-Model Prompting**: [titan-ai.dev/docs/multi-model](https://titan-ai.dev/docs/multi-model)
-- **WebContainer Runtime**: [titan-ai.dev/docs/webcontainer](https://titan-ai.dev/docs/webcontainer)
-- **Error Detection & Recovery**: [titan-ai.dev/docs/error-detection](https://titan-ai.dev/docs/error-detection)
-- **Prompt Parsing**: [titan-ai.dev/docs/prompt-parsing](https://titan-ai.dev/docs/prompt-parsing)
-- **Integrated Terminal**: [titan-ai.dev/docs/integrated-terminal](https://titan-ai.dev/docs/integrated-terminal)
-- **File System Architecture**: [titan-ai.dev/docs/filesystem](https://titan-ai.dev/docs/filesystem)
-- **Model Switching**: [titan-ai.dev/docs/model-switching](https://titan-ai.dev/docs/model-switching)
-- **API Integration**: [titan-ai.dev/docs/api-integration](https://titan-ai.dev/docs/api-integration)
+- **Multi-Model Prompting**: [titan-ai.dev/docs/multi-model][(https://titan-ai.dev/docs/multi-model](https://titannexus-production.up.railway.app/documentation))
+- **WebContainer Runtime**: [titan-ai.dev/docs/webcontainer]([https://titan-ai.dev/docs/webcontainer](https://titannexus-production.up.railway.app/documentation))
+- **Error Detection & Recovery**: [titan-ai.dev/docs/error-detection]([https://titan-ai.dev/docs/error-detection](https://titannexus-production.up.railway.app/documentation))
+- **Prompt Parsing**: [titan-ai.dev/docs/prompt-parsing]([https://titan-ai.dev/docs/prompt-parsing](https://titannexus-production.up.railway.app/documentation))
+- **Integrated Terminal**: [titan-ai.dev/docs/integrated-terminal]([https://titan-ai.dev/docs/integrated-terminal](https://titannexus-production.up.railway.app/documentation))
+- **File System Architecture**: [titan-ai.dev/docs/filesystem]([https://titan-ai.dev/docs/filesystem](https://titannexus-production.up.railway.app/documentation))
+- **Model Switching**: [titan-ai.dev/docs/model-switching]([https://titan-ai.dev/docs/model-switching](https://titannexus-production.up.railway.app/documentation))
+- **API Integration**: [titan-ai.dev/docs/api-integration](https://titannexus-production.up.railway.app/documentation)
 
 ## 🔧 API Reference
 
