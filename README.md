@@ -150,58 +150,58 @@ Think of it as Reddit, GitHub Discussions, and Stack Overflow combined into one 
 
 ## 🛣️ Roadmap
 
-### Completed
-- ✅ Multi-model support
-- ✅ OpenRouter Integration
-- ✅ Gemini Integration
-- ✅ Download project as ZIP
-- ✅ File synchronization
-- ✅ Docker containerization
-- ✅ GitHub integration
-- ✅ API key management through UI
-- ✅ Terminal integration
-- ✅ Code version history
-- ✅ Streaming code output
-- ✅ Git clone functionality
-- ✅ Mobile responsive design
-- ✅ Image attachment support
-- ✅ Template options
-- ✅ Community platform integration
+### ✅ Completed
+- ✅ Multi-model support  
+- ✅ OpenRouter Integration  
+- ✅ Gemini Integration  
+- ✅ Download project as ZIP  
+- ✅ File synchronization  
+- ✅ Docker containerization  
+- ✅ GitHub integration  
+- ✅ API key management through UI  
+- ✅ Terminal integration  
+- ✅ Code version history  
+- ✅ Streaming code output  
+- ✅ Git clone functionality  
+- ✅ Mobile responsive design  
+- ✅ Image attachment support  
+- ✅ Template options  
+- ✅ Community platform integration  
 
-### High Priority
-- ⬜ Performance optimization for file handling
-- ⬜ Improved prompting for smaller LLMs
-- ⬜ Backend agent architecture
-- ⬜ Visual component editor
-- ⬜ Database integration
-- ⬜ Collaborative editing
+### ⚡ High Priority
+- ⚡ Performance optimization for file handling  
+- ⚡ Improved prompting for smaller LLMs  
+- ⚡ Backend agent architecture  
+- ⚡ Visual component editor  
+- ⚡ Database integration  
+- ⚡ Collaborative editing  
 
-### Planned
-- ⬜ Supabase Integration
-- ⬜ Project planning with Markdown
-- ⬜ VSCode Integration
-- ⬜ Document upload for reference
-- ⬜ Voice prompting
-- ⬜ Additional cloud provider integrations
-- ⬜ Community awards and recognition system
+### 🧠 Planned
+- 🧠 Supabase Integration  
+- 🧠 Project planning with Markdown  
+- 🧠 VSCode Integration  
+- 🧠 Document upload for reference  
+- 🧠 Voice prompting  
+- 🧠 Additional cloud provider integrations  
+- 🧠 Community awards and recognition system  
 
 ## 🤝 Contributing
 
 We welcome contributions to both the platform and our community! Here's how to get started:
 
 ### Contributing to the Platform
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+1. Fork the repository  
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)  
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)  
+4. Push to the branch (`git push origin feature/amazing-feature`)  
+5. Open a Pull Request  
 
 ### Contributing to the Community
-1. Join our [Titan Nexus community](https://titannexus-production.up.railway.app/)
-2. Share your projects and experiences
-3. Participate in discussions and help other members
-4. Submit feature requests and bug reports
-5. Create tutorials and guides for the community knowledge base
+1. Join our [Titan Nexus community](https://titannexus-production.up.railway.app/)  
+2. Share your projects and experiences  
+3. Participate in discussions and help other members  
+4. Submit feature requests and bug reports  
+5. Create tutorials and guides for the community knowledge base  
 
 ## 📜 License
 
@@ -210,5 +210,5 @@ Titan AI is licensed under the MIT License. However, please note that it uses We
 ---
 
 <div align="center">
-  <p>Built with ❤️ by the Titan AI team and contributors worldwide</p>
+  <p>Crafted with ⚡ innovation and 🧠 intelligence by the Titan AI team and contributors worldwide</p>
 </div>
