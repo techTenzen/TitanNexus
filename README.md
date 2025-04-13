@@ -242,6 +242,9 @@ git push origin feature/your-innovative-feature
 - Share tutorials, workflow tips, or use cases
 - Participate in discussions and feature planning
 - Report bugs or suggest enhancements
+  
+  <h3><a href="https://titannexus-production.up.railway.app/">🌐 Experience Titan AI Today!</a></h3>
+
 
 ---
 
