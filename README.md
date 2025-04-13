@@ -243,7 +243,7 @@ git push origin feature/your-innovative-feature
 - Participate in discussions and feature planning
 - Report bugs or suggest enhancements
   
-  <div align="center"><h3><a href="https://titannexus-production.up.railway.app/">🌐 Join Titan Nexus Today!</a></h3></div>div>
+  <div align="center"><h3><a href="https://titannexus-production.up.railway.app/">🌐 Join Titan Nexus Today!</a></h3></div>
 
 
 ---
