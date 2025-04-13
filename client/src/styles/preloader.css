@@ -182,8 +182,8 @@
 /* Add custom font declarations */
 @font-face {
     font-family: 'Bigilla';
-    src: url('/fonts/Bigilla.woff2') format('woff2'),
-    url('/fonts/Bigilla.woff') format('woff');
+    src: url('/fonts/Bigilla-Bold.woff') format('woff'),
+    url('/fonts/Bigilla-Bold.woff') format('woff');
     font-weight: normal;
     font-style: normal;
     font-display: swap;
@@ -191,8 +191,8 @@
 
 @font-face {
     font-family: 'Barracuda';
-    src: url('/fonts/Barracuda.woff2') format('woff2'),
-    url('/fonts/Barracuda.woff') format('woff');
+    src: url('/fonts/Barracuda-Bold.woff') format('woff'),
+    url('/fonts/Barracuda-Bold.woff') format('woff');
     font-weight: normal;
     font-style: normal;
     font-display: swap;
