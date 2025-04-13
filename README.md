@@ -1,7 +1,7 @@
 <div align="center">
   <img src="https://via.placeholder.com/200x200" alt="Titan AI Logo" width="200" height="200">
   <h1>Titan AI</h1>
-  <p><strong>The Next-Generation AI-Powered Development Platform</strong></p>
+  <p><strong>The Next-Generation AI-Powered Development Platform with an Integrated Community Hub</strong></p>
   
   <p>
     <a href="#installation"><strong>Installation</strong></a> •
@@ -58,6 +58,9 @@ Revert to earlier versions of your code and track changes throughout your develo
 
 ### 🌐 Seamless Deployment Options
 Deploy your projects directly to platforms like GitHub or Netlify with just a few clicks, or download as a ZIP file for local use.
+
+### 🤝 Integrated Community Platform
+Share projects, engage in discussions, submit feature requests, report issues, and connect with other developers directly within the Titan AI ecosystem.
 
 ## ⚡ Quickstart
 
@@ -119,13 +122,34 @@ For providers that support custom base URLs (such as Ollama or LM Studio):
 3. Search for your provider
 4. Enter your custom base URL in the designated field
 
-## 🌟 Community & Support
+## 🌟 Community Hub
 
-Join our growing community:
+Join our thriving community platform at [Titan Nexus](https://titannexus-production.up.railway.app/). Unlike traditional documentation sites, Titan Nexus is a full-featured community hub where developers can:
 
-- **Website**: [https://titannexus-production.up.railway.app/](https://titannexus-production.up.railway.app/)
-- **Discord**: Join our Discord community (coming soon)
-- **GitHub Issues**: Report bugs or request features through our issue tracker
+### 🚀 Project Showcase
+- Share your Titan AI projects with the community
+- Get feedback and suggestions on your implementations
+- Discover innovative projects from other developers
+- Star and follow projects that inspire you
+
+### 💬 Discussion Forums
+- **Feature Requests**: Propose and vote on new features
+- **Technical Support**: Get help with implementation challenges
+- **General Discussion**: Share ideas, tips, and best practices
+- **Issues & Bug Reports**: Report and track bugs in a collaborative environment
+
+### 👥 Developer Network
+- Build your profile and showcase your expertise
+- Connect with like-minded developers
+- Find collaborators for your projects
+- Participate in community challenges and events
+
+### 📊 Community Insights
+- Track trending topics and popular projects
+- See real-time statistics about the Titan AI ecosystem
+- Get insights into how others are using the platform
+
+Think of it as Reddit, GitHub Discussions, and Stack Overflow combined into one integrated platform specifically for the Titan AI community!
 
 ## 🛣️ Roadmap
 
@@ -145,6 +169,7 @@ Join our growing community:
 - ✅ Mobile responsive design
 - ✅ Image attachment support
 - ✅ Template options
+- ✅ Community platform integration
 
 ### High Priority
 - ⬜ Performance optimization for file handling
@@ -161,16 +186,25 @@ Join our growing community:
 - ⬜ Document upload for reference
 - ⬜ Voice prompting
 - ⬜ Additional cloud provider integrations
+- ⬜ Community awards and recognition system
 
 ## 🤝 Contributing
 
-We welcome contributions! Here's how to get started:
+We welcome contributions to both the platform and our community! Here's how to get started:
 
+### Contributing to the Platform
 1. Fork the repository
 2. Create your feature branch (`git checkout -b feature/amazing-feature`)
 3. Commit your changes (`git commit -m 'Add some amazing feature'`)
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
+
+### Contributing to the Community
+1. Join our [Titan Nexus community](https://titannexus-production.up.railway.app/)
+2. Share your projects and experiences
+3. Participate in discussions and help other members
+4. Submit feature requests and bug reports
+5. Create tutorials and guides for the community knowledge base
 
 ## 📜 License
 
