@@ -1,6 +1,5 @@
 <div align="center">
   <img src="https://github.com/user-attachments/assets/0edee7bc-c346-447f-a494-c3c6f48208ea" alt="Titan AI Logo" width="200" height="200">
-  <h1>Titan AI</h1>
   <p><strong>The Next-Generation AI-Powered Development Platform with an Integrated Community Hub</strong></p>
 
   <p>
@@ -23,10 +22,6 @@
 **Titan AI** is an open-source, browser-based development platform that brings together powerful AI models and full-stack execution in one seamless interface. Build, test, and deploy apps faster—with real-time collaboration, smart code generation, and zero local setup.
 
 🔗 **Live Platform**: [titan1.pages.dev](https://titan1.pages.dev/)  
-
-<p align="center">
-  <img src="https://example.com/titan-screenshot.png" alt="Titan AI Interface" width="800">
-</p>
 
 ---
 
@@ -84,7 +79,7 @@ Experience Titan AI yourself - no installation required:
 | **v1.0** | Jan 2024 | Initial release featuring foundational AI integration, basic file system, and single-model support |
 | **v1.2** | Feb 2024 | Enhanced with multi-model selection capabilities, WebContainers integration, and project export functionality |
 | **v1.5** | Mar 2024 | Major update introducing streaming terminal output, GitHub integration, and comprehensive UI redesign |
-| **v2.0 Beta** | Apr 2024 | Expanded platform with integrated community hub, Docker support, mobile-responsive interface, image input processing, and intelligent error recovery |
+| **v2.0 Beta** | Apr 2024 | Expanded platform with integrated community hub, mobile-responsive interface, image input processing, and intelligent error recovery |
 | **v2.1** | Current | Latest stable release featuring template library, AI-powered code optimization, and real-time application preview |
 
 ---
@@ -142,10 +137,7 @@ Comprehensive guides, tutorials, and reference materials are available at our
 - 📁 **File & Terminal Operations**
   - Advanced file management
   - Terminal command execution
-  
-- 🚀 **Deployment Strategies**
-  - Platform-specific deployment guides
-  - CI/CD pipeline integration
+ 
   
 - 🧠 **Advanced AI Capabilities**
   - Model-specific prompt engineering
