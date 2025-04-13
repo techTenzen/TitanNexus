@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { Switch, Route } from "wouter";
 import { Toaster } from "@/components/ui/toaster";
 import NotFound from "@/pages/not-found";
@@ -10,6 +11,7 @@ import ProjectsPage from "@/pages/projects-page";
 import DocumentationPage from "@/pages/documentation-page";
 import { ProtectedRoute } from "./lib/protected-route";
 import ProjectDetailPage from "@/pages/project-detail-page";
+import Preloader from "./components/Preloader";
 
 function Router() {
     return (
@@ -28,10 +30,22 @@ function Router() {
 }
 
 function App() {
+    const [loading, setLoading] = useState(true);
+
+    const handlePreloaderComplete = () => {
+        setLoading(false);
+    };
+
     return (
         <>
-            <Router />
-            <Toaster />
+            {loading ? (
+                <Preloader onComplete={handlePreloaderComplete} />
+            ) : (
+                <>
+                    <Router />
+                    <Toaster />
+                </>
+            )}
         </>
     );
 }
