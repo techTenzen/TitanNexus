@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://github.com/user-attachments/assets/0edee7bc-c346-447f-a494-c3c6f48208ea" alt="Titan AI Logo" width="200" height="200">
+  <img src="https://github.com/user-attachments/assets/0edee7bc-c346-447f-a494-c3c6f48208ea" alt="Titan AI Logo" width="100" height="100">
   <h1>Titan AI</h1>
   <p><strong>The Next-Generation AI-Powered Development Platform with an Integrated Community Hub</strong></p>
 
