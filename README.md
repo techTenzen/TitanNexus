@@ -7,61 +7,80 @@
     <a href="#features"><strong>Features</strong></a> •
     <a href="#quickstart"><strong>Quickstart</strong></a> •
     <a href="#documentation"><strong>Documentation</strong></a> •
-    <a href="#community"><strong>Community</strong></a> •
-    <a href="#contributing"><strong>Contributing</strong></a>
+    <a href="#community-hub"><strong>Community</strong></a> •
+    <a href="#contributing"><strong>Contributing</strong></a> •
+    <a href="#live-demo"><strong>Live Demo</strong></a>
   </p>
-  
   <br>
-  
-
 </div>
+
+---
 
 ## 🚀 Revolutionizing Development with AI
 
-**Titan AI** is a groundbreaking development platform that combines the power of multiple AI models with a complete browser-based development environment. Build, test, and deploy full-stack applications entirely in your browser with intelligent AI assistance at every step.
+**Titan AI** is an open-source, browser-based development platform that brings together powerful AI models and full-stack execution in one seamless interface. Build, test, and deploy apps faster—with real-time collaboration, smart code generation, and zero local setup.
 
-```javascript
-// Generate a complete React project with one prompt
-const project = await titan.createProject(
-  "Create a weather dashboard with real-time updates and dark mode"
-);
+🔗 **Try it live**: [titan1.pages.dev](https://titan1.pages.dev/)  
 
-// Run it instantly in your browser
-await titan.deploy(project);
-```
+---
 
-## ✨ Features
+## ✨ Features at a Glance
 
-### 🧠 Multi-Model Integration
-Choose from multiple LLM providers including OpenAI, Anthropic, Gemini, Mistral, xAI, Groq, and more. Select the best model for your specific task - use GPT-4 for complex reasoning, Claude for long-context tasks, and Mistral for speed-optimized workflows.
+### 🧠 Multi-Model Intelligence
+Leverage top LLMs including OpenAI, Claude, Gemini, Groq, Mistral, and more. Switch models dynamically based on use case—deep reasoning, long-form generation, or speed execution.
 
-### 💻 Browser-Based Development Environment
-Run full-stack Node.js applications directly in your browser using WebContainer technology. No local setup required - install npm packages, run build tools, and test your applications in a virtualized environment.
+### 💻 WebContainer-Powered Dev Environment
+Run Node.js full-stack apps **entirely in the browser**. Install dependencies, run commands, and preview apps—no installations needed.
 
-### 🛠️ Intelligent Error Detection & Recovery
-Automatically detect and fix errors in your code. Titan AI monitors terminal output, identifies issues, and generates fixes without manual intervention.
+### 🔍 AI-Driven Debugging
+Titan AI analyzes logs and errors and suggests or applies fixes automatically—streamlining debugging and recovery.
 
-### 📝 Project Generation from Natural Language
-Convert natural language descriptions into complete project structures. Titan AI creates directories, files, and configurations based on your description.
+### 🧾 Natural Language to Codebase
+Turn prompts into working codebases. Titan structures your folders, files, configs, and logic with a single command.
 
-### 🖥️ Integrated Terminal & Preview
-Access a full-featured terminal directly in your browser. Run commands, view logs, and see your application in real-time with the built-in preview window.
+### 🛠️ Live Terminal & Preview
+An embedded terminal lets you run and preview apps side-by-side—just like VS Code, but in your browser.
 
-### 📁 Complete File System Management
-Work with a persistent virtual file system. Create, edit, and organize files just like in a traditional development environment.
+### 🗂️ Smart File System
+Persistent file system with intuitive navigation, editing, renaming, and drag-drop functionality.
 
-### 🔄 Version Control & Rollback
-Revert to earlier versions of your code and track changes throughout your development process.
+### 🔁 Code History & Rollback
+Every major change is tracked. Roll back, fork, or restore previous versions with ease.
 
-### 🌐 Seamless Deployment Options
-Deploy your projects directly to platforms like GitHub or Netlify with just a few clicks, or download as a ZIP file for local use.
+### 📦 Git & Docker Integrated
+Clone repositories, commit changes, and even run everything inside Docker—all from your browser.
 
-### 🤝 Integrated Community Platform
-Share projects, engage in discussions, submit feature requests, report issues, and connect with other developers directly within the Titan AI ecosystem.
+### 🌍 Instant Deployment
+Export as ZIP, push to GitHub, or deploy directly to Netlify or any platform of your choice.
+
+### 🌐 Real-Time Collaboration (WIP)
+Collaborate with peers on the same project with chat, version diffing, and live preview.
+
+---
+
+## 🔥 Live Demo
+
+Check out the latest deployed version at:  
+👉 **[https://titan1.pages.dev](https://titan1.pages.dev)**  
+⚠️ Open-source preview — experimental features may be in beta.  
+
+---
+
+## 📈 Version Milestones
+
+| Version | Highlights |
+|--------|------------|
+| **v1.0** | Initial release with basic AI integration, file system, and single-model support |
+| **v1.2** | Added multi-model selection, WebContainers integration, and zip export |
+| **v1.5** | Introduced terminal streaming, GitHub integration, and UI redesign |
+| **v2.0 Beta** | Community platform added, Docker support, mobile responsive UI, image input, and error recovery |
+| **v2.1** | Template library, AI code improvement, and real-time preview |
+
+---
 
 ## ⚡ Quickstart
 
-### Installation
+### 🔧 Installation (Local)
 
 ```bash
 # Clone the repository
@@ -74,141 +93,153 @@ npm install
 # Using pnpm (recommended)
 pnpm install
 
-# Start the development server
+# Start the dev server
 pnpm run dev
-```
-
-### Docker Installation
-
-```bash
-# Build the Docker image
+🐳 Docker Installation
+bash
+Copy
+Edit
+# Build image
 docker build . --target titan-ai-development
 
-# Run the container
+# Launch the container
 docker compose --profile development up
-```
+📚 Documentation
+Comprehensive setup, tips, and use-cases available at our
+📖 Documentation Portal
 
-## 📚 Documentation
+Covered topics:
 
-For comprehensive documentation, visit our [documentation portal](https://titannexus-production.up.railway.app/documentation).
+🔑 API key setup
 
-Our documentation covers:
+🌐 Provider custom base URLs
 
-- Setting up your API keys for different providers
-- Configuring custom base URLs for local models
-- Creating and managing projects
-- Using the integrated terminal
-- Deploying your applications
-- Advanced features and tips
+🏗️ Project generation
 
-## 🔧 Configuring API Keys and Providers
+📁 File & terminal usage
 
-### Adding Your API Keys
-Setting up your API keys in Titan AI is straightforward:
+🚀 Deployment
 
-1. Open the home page (main interface)
-2. Select your desired provider from the dropdown menu
-3. Click the pencil (edit) icon
-4. Enter your API key in the secure input field
+🧠 Advanced AI features
 
-### Configuring Custom Base URLs
-For providers that support custom base URLs (such as Ollama or LM Studio):
+🛠️ Configuring Providers
+Adding API Keys
+Open Titan AI home
 
-1. Click the settings icon in the sidebar
-2. Navigate to the "Providers" tab
-3. Search for your provider
-4. Enter your custom base URL in the designated field
+Select model provider
 
-## 🌟 Community Hub
+Click ✏️ icon
 
-Join our thriving community platform at [Titan Nexus](https://titannexus-production.up.railway.app/). Unlike traditional documentation sites, Titan Nexus is a full-featured community hub where developers can:
+Paste your key securely
 
-### 🚀 Project Showcase
-- Share your Titan AI projects with the community
-- Get feedback and suggestions on your implementations
-- Discover innovative projects from other developers
-- Star and follow projects that inspire you
+Setting Custom Base URLs
+Navigate to ⚙️ > Providers
 
-### 💬 Discussion Forums
-- **Feature Requests**: Propose and vote on new features
-- **Technical Support**: Get help with implementation challenges
-- **General Discussion**: Share ideas, tips, and best practices
-- **Issues & Bug Reports**: Report and track bugs in a collaborative environment
+Search provider (e.g. Ollama)
 
-### 👥 Developer Network
-- Build your profile and showcase your expertise
-- Connect with like-minded developers
-- Find collaborators for your projects
-- Participate in community challenges and events
+Input your base URL (e.g. http://localhost:11434)
 
-### 📊 Community Insights
-- Track trending topics and popular projects
-- See real-time statistics about the Titan AI ecosystem
-- Get insights into how others are using the platform
+🌍 Community Hub
+Explore the Titan Nexus — your go-to space to:
 
-Think of it as Reddit, GitHub Discussions, and Stack Overflow combined into one integrated platform specifically for the Titan AI community!
+🚀 Showcase Projects
+Share your Titan AI projects. View others' work, give feedback, get stars.
 
-## 🛣️ Roadmap
+💬 Engage in Forums
+🛠️ Feature Requests
 
-### ✅ Completed
-- ✅ Multi-model support  
-- ✅ OpenRouter Integration  
-- ✅ Gemini Integration  
-- ✅ Download project as ZIP  
-- ✅ File synchronization  
-- ✅ Docker containerization  
-- ✅ GitHub integration  
-- ✅ API key management through UI  
-- ✅ Terminal integration  
-- ✅ Code version history  
-- ✅ Streaming code output  
-- ✅ Git clone functionality  
-- ✅ Mobile responsive design  
-- ✅ Image attachment support  
-- ✅ Template options  
-- ✅ Community platform integration  
+🧩 Technical Help
 
-### ⚡ High Priority
-- ⚡ Performance optimization for file handling  
-- ⚡ Improved prompting for smaller LLMs  
-- ⚡ Backend agent architecture  
-- ⚡ Visual component editor  
-- ⚡ Database integration  
-- ⚡ Collaborative editing  
+💡 General Tips
 
-### 🧠 Planned
-- 🧠 Supabase Integration  
-- 🧠 Project planning with Markdown  
-- 🧠 VSCode Integration  
-- 🧠 Document upload for reference  
-- 🧠 Voice prompting  
-- 🧠 Additional cloud provider integrations  
-- 🧠 Community awards and recognition system  
+🐞 Bug Reports
 
-## 🤝 Contributing
+👥 Build Your Network
+Create profiles, connect with developers, collaborate or join challenges.
 
-We welcome contributions to both the platform and our community! Here's how to get started:
+📊 Get Community Insights
+Trending tools
 
-### Contributing to the Platform
-1. Fork the repository  
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)  
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)  
-4. Push to the branch (`git push origin feature/amazing-feature`)  
-5. Open a Pull Request  
+Top projects
 
-### Contributing to the Community
-1. Join our [Titan Nexus community](https://titannexus-production.up.railway.app/)  
-2. Share your projects and experiences  
-3. Participate in discussions and help other members  
-4. Submit feature requests and bug reports  
-5. Create tutorials and guides for the community knowledge base  
+Popular use cases
 
-## 📜 License
+Weekly stats
 
-Titan AI is licensed under the MIT License. However, please note that it uses WebContainers API that requires licensing for production usage in a commercial, for-profit setting.
+Think Reddit, GitHub, and StackOverflow — merged and built just for Titan AI.
 
----
+🛣️ Roadmap
+✅ Completed
+✅ Multi-model support
 
-<div align="center">
-  <p>Crafted with ⚡ innovation and 🧠 intelligence by the Titan AI team and contributors worldwide</p>
-</div>
+✅ OpenRouter, Gemini Integration
+
+✅ ZIP Export & GitHub Integration
+
+✅ Persistent file system
+
+✅ WebContainer (Node.js) Execution
+
+✅ Real-time terminal & logs
+
+✅ Mobile responsive layout
+
+✅ Docker-based dev
+
+✅ Streaming output
+
+✅ Image input support
+
+✅ Template Library
+
+✅ Community Hub
+
+⚡ High Priority
+⚡ Performance boosts for large codebases
+
+⚡ AI agents for background refactoring
+
+⚡ Visual React component editor
+
+⚡ Collaborative editing
+
+⚡ SQLite/PostgreSQL DB integration
+
+🧠 Planned
+🧠 Supabase integration
+
+🧠 Markdown-based project planner
+
+🧠 VS Code Extension
+
+🧠 Voice Prompting
+
+🧠 Award system for community
+
+🧠 Analytics dashboard for contributors
+
+🤝 Contributing
+We welcome all kinds of contributions — code, design, docs, or community!
+
+🛠 Platform Contribution
+bash
+Copy
+Edit
+# Fork → Branch → Commit → PR
+
+git checkout -b feature/your-feature-name
+git commit -m "Added: New feature"
+git push origin feature/your-feature-name
+🌍 Community Contribution
+Join Titan Nexus
+
+Submit feedback, create tutorials, or host discussions
+
+Share bugs, ideas, or resources
+
+📜 License
+Titan AI is licensed under the MIT License.
+
+⚠️ Note: It uses WebContainers by StackBlitz, which may require commercial licensing for production use in paid apps.
+
+<div align="center"> <strong>Crafted with ⚡ innovation and 🧠 intelligence by the Titan AI team and the open-source community</strong><br/> <a href="https://titan1.pages.dev">🌐 Try Titan AI Now</a> </div> ```
