@@ -144,36 +144,25 @@ export default function ProjectsPage() {
               )}
 
               {/* Project showcase info */}
-              <motion.div 
-                className="mt-12 p-6 bg-background-secondary/70 backdrop-blur-sm border border-white/10 rounded-xl text-center"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.3 }}
-              >
-                <h2 className="text-xl font-bold mb-4">Showcase Your Titan AI Project</h2>
-                <p className="text-gray-400 max-w-3xl mx-auto mb-6">
-                  Built something amazing with Titan AI? Share it with the community to get feedback, recognition, and inspire others.
-                  Projects with the most upvotes will be featured on the homepage.
-                </p>
-                {user ? (
-                  <Button
-                    onClick={() => setShowNewProjectForm(true)}
-                    className="bg-gradient-to-r from-[#FF3370] to-[#7928CA]"
-                  >
-                    Submit Your Project
-                  </Button>
-                ) : (
-                  <div className="space-y-2">
-                    <p className="text-gray-400">You need to be signed in to submit a project.</p>
+                <motion.div
+                    className="mt-12 p-6 bg-background-secondary/70 backdrop-blur-sm border border-white/10 rounded-xl text-center"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.3 }}
+                >
+                    <h2 className="text-xl font-bold mb-4">Join the Conversation</h2>
+                    <p className="text-gray-400 max-w-3xl mx-auto mb-6">
+                        Have questions, ideas, or cool use-cases for Titan AI? Head over to the community forum to ask, discuss, or help others build smarter.
+                        It's where our devs and users hang out — your voice belongs there too.
+                    </p>
                     <Button
-                      onClick={() => window.location.href = '/auth'}
-                      className="bg-gradient-to-r from-[#FF3370] to-[#7928CA]"
+                        onClick={() => window.location.href = '/forum'}
+                        className="bg-gradient-to-r from-[#FF3370] to-[#7928CA]"
                     >
-                      Sign In to Submit
+                        Visit the Forum
                     </Button>
-                  </div>
-                )}
-              </motion.div>
+                </motion.div>
+
             </>
           )}
         </div>

@@ -11,6 +11,7 @@ import { eq, desc } from "drizzle-orm";
 import createMemoryStore from "memorystore";
 import { hashPassword } from "./password-utils";
 import 'dotenv/config'; // Add import for dotenv
+import type { User, UpdateProfile } from "@shared/schema";
 
 const MemoryStore = createMemoryStore(session);
 
@@ -126,7 +127,21 @@ export class MemStorage implements IStorage {
 
     return user;
   }
+// Add this method to your DatabaseStorage class in storage.ts
+  async updateUser(id: number, userData: Partial<UpdateProfile>): Promise<User | undefined> {
+    try {
+      const [updatedUser] = await db
+          .update(users)
+          .set(userData)
+          .where(eq(users.id, id))
+          .returning();
 
+      return updatedUser;
+    } catch (error) {
+      console.error("Database error updating user:", error);
+      throw error;
+    }
+  }
   async getAllUsers(): Promise<User[]> {
     return Array.from(this.users.values());
   }

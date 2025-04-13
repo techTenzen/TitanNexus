@@ -15,7 +15,9 @@ interface DiscussionCardProps {
   discussion: Discussion;
   index: number;
   isDetailView?: boolean;
+  isAuthenticated?: boolean;
 }
+
 
 export function DiscussionCard({ discussion, index, isDetailView = false }: DiscussionCardProps) {
   const queryClient = useQueryClient();
@@ -168,13 +170,26 @@ export function DiscussionCard({ discussion, index, isDetailView = false }: Disc
               </div>
             </div>
           </div>
-          <Link href={isDetailView ? "#" : `/forum/${discussion.id}`}>
-            <div className="block hover:opacity-90 transition-opacity">
-              <h3 className="text-xl font-bold mb-2">{discussion.title}</h3>
-              <p className="text-gray-400 mb-4 line-clamp-3">{discussion.description}</p>
-            </div>
-          </Link>
-          
+          {isDetailView ? (
+              <div className="block hover:opacity-90 transition-opacity">
+                <h3 className="text-xl font-bold mb-2">{discussion.title}</h3>
+                <p className="text-gray-400 mb-4 line-clamp-3">{discussion.description}</p>
+              </div>
+          ) : currentUser ? (
+              <Link href={`/forum/${discussion.id}`}>
+                <div className="block hover:opacity-90 transition-opacity">
+                  <h3 className="text-xl font-bold mb-2">{discussion.title}</h3>
+                  <p className="text-gray-400 mb-4 line-clamp-3">{discussion.description}</p>
+                </div>
+              </Link>
+          ) : (
+              <div className="block hover:opacity-70 transition-opacity cursor-not-allowed">
+                <h3 className="text-xl font-bold mb-2">{discussion.title}</h3>
+                <p className="text-gray-400 mb-4 line-clamp-3">{discussion.description}</p>
+              </div>
+          )}
+
+
           {discussion.imageUrl && (
             <div className="mb-4">
               <img 

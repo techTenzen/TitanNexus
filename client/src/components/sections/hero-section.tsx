@@ -131,7 +131,7 @@ createReactComponent().then(code => {
                   variant="secondary"
                   size="lg"
                   icon={<FaGithub />}
-                  onClick={() => window.open('https://github.com', '_blank')}
+                  onClick={() => window.open('https://github.com/techTenzen/Titan', '_blank')}
               >
                 View on GitHub
               </GradientButton>
