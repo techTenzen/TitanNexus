@@ -6,6 +6,7 @@ interface PreloaderProps {
 }
 
 const Preloader = ({ onComplete }: PreloaderProps) => {
+    const preloaderRef = useRef<HTMLDivElement>(null);
     const mainHeaderRef = useRef<HTMLHeadingElement>(null);
     const taglineRef = useRef<HTMLDivElement>(null);
 
@@ -90,14 +91,21 @@ const Preloader = ({ onComplete }: PreloaderProps) => {
         animateBlocks();
         animateHeader();
 
-        // Complete preloader after animations
+        // Fade out the entire preloader
+        setTimeout(() => {
+            if (preloaderRef.current) {
+                preloaderRef.current.style.opacity = '0';
+            }
+        }, 9000);
+
+        // Complete preloader after fade out
         setTimeout(() => {
             onComplete();
-        }, 10000);
+        }, 11000); // Extended from 10000 to 11000 to allow for fade out
     }, [onComplete]);
 
     return (
-        <div id="preloader">
+        <div id="preloader" ref={preloaderRef}>
             <div className="container">
                 <div className="text-container">
                     <h1 className="main-header" ref={mainHeaderRef}>
