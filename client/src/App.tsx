@@ -32,7 +32,19 @@ function Router() {
 function App() {
     const [loading, setLoading] = useState(true);
 
+    useEffect(() => {
+        // Check if user has already seen the preloader
+        const hasSeenPreloader = localStorage.getItem('hasSeenPreloader');
+
+        if (hasSeenPreloader) {
+            // If user has seen preloader, skip it
+            setLoading(false);
+        }
+    }, []);
+
     const handlePreloaderComplete = () => {
+        // Mark that user has seen the preloader
+        localStorage.setItem('hasSeenPreloader', 'true');
         setLoading(false);
     };
 
