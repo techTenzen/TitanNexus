@@ -12,7 +12,12 @@ import { motion } from 'framer-motion';
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen flex flex-col bg-background text-foreground bg-[radial-gradient(circle_at_10%_20%,rgba(121,40,202,0.1)_0%,transparent_30%),radial-gradient(circle_at_90%_80%,rgba(255,51,112,0.1)_0%,transparent_30%)] bg-grid-pattern">
+      <div className="min-h-screen flex flex-col bg-background text-foreground
+  bg-[radial-gradient(circle_at_10%_20%,rgba(121,40,202,0.1)_0%,transparent_30%),
+      radial-gradient(circle_at_90%_80%,rgba(255,51,112,0.1)_0%,transparent_30%),
+      radial-gradient(circle_at_50%_10%,rgba(0,212,255,0.08)_0%,transparent_35%),
+      radial-gradient(circle_at_20%_70%,rgba(255,255,255,0.05)_0%,transparent_30%)]
+  bg-grid-pattern">
       <TickerBanner />
       <Navbar />
       

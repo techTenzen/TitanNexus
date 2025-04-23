@@ -268,10 +268,60 @@ export default function AuthPage() {
               transition={{ duration: 0.5 }}
               className="flex flex-col justify-center space-y-4"
             >
-              <div className="space-y-2">
-                <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl bg-clip-text text-transparent bg-gradient-to-r from-[#FF3370] to-[#7928CA]">
-                  Join the Titan AI Community
-                </h1>
+
+
+              // Add this to your auth page component or in a separate CSS file
+              <style jsx global>{`
+  /* Gradient Text Animation Styles */
+  @import url('https://fonts.googleapis.com/css2?family=Geist+Sans:wght@400;500;600;700&display=swap');
+
+  :root {
+    --angle: 180deg;
+  }
+  .gradient-text-ai {
+    display: inline-block;
+    transform: translateX(-2px); /* Adjust value as needed */
+    padding-right: 4px;
+  }
+  .gradient-text {
+    font-family: "Inter", sans-serif;
+    font-weight: 700;
+    line-height: 1.1;
+    padding-right: 4px; /* Add some padding to prevent clipping */
+    line-height: 1.2; /* Slightly increase from 1.1 */
+    display: inline-block; /* Make sure it takes the needed space */
+    overflow: visible; /* Ensure text doesn't get clipped */
+    background:
+      conic-gradient(from var(--angle) at 50% 50%,
+      #30EFFF 0deg,
+      #7928CA 120deg,
+      #FF3370 240deg,
+      #30EFFF 360deg);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    animation: rotate 8s infinite linear;
+    letter-spacing: -0.02em;
+  }
+
+  .gradient-text-italic {
+    font-style: italic;
+  }
+
+  @property --angle {
+    inherits: true;
+    initial-value: 0deg;
+    syntax: '<angle>';
+  }
+
+  @keyframes rotate {
+    to { --angle: 360deg; }
+  }
+`}</style>
+
+              <div className="space-y-2"><h1 className="text-3xl font-bold tracking-tighter sm:text-5xl">
+                Join the <span className="gradient-text gradient-text-italic">Titan <span style={{ paddingRight: '4px' }}>AI</span></span> <span >Community</span>
+              </h1>
                 <p className="max-w-[600px] text-gray-400 md:text-xl">
                   Connect with developers, showcase your projects, and contribute to the future of AI-powered development.
                 </p>
@@ -299,7 +349,9 @@ export default function AuthPage() {
             >
               <Card className="bg-background-secondary/70 backdrop-blur-sm border-white/10">
                 <CardHeader>
-                  <CardTitle>Authentication</CardTitle>
+                  <CardTitle>
+                    <span className="gradient-text">Authentication</span>
+                  </CardTitle>
                   <CardDescription>
                     Sign in to your account or create a new one
                   </CardDescription>
@@ -341,13 +393,13 @@ export default function AuthPage() {
                               </FormItem>
                             )}
                           />
-                          
-                          <Button 
-                            type="submit" 
-                            className="w-full bg-gradient-to-r from-[#FF3370] to-[#7928CA]"
-                            disabled={isLoggingIn}
+
+                          <Button
+                              type="submit"
+                              className="w-full bg-gradient-to-r from-[#FF3370] to-[#7928CA]"
+                              disabled={isLoggingIn}
                           >
-                            {isLoggingIn ? "Signing in..." : "Sign In"}
+                            {isLoggingIn ? "Signing in..." : <span className="gradient-text-italic">Sign In</span>}
                           </Button>
                         </form>
                       </Form>

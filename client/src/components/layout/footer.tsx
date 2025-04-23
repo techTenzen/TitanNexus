@@ -76,16 +76,17 @@ export function Footer() {
         >
           <h3 className="text-3xl font-extrabold mb-6 text-gradient">🔮 Latest in AI & Tech</h3>
           <div
-              className="bg-gray-900/60 backdrop-blur p-6 rounded-2xl border border-purple-500 shadow-lg transform hover:scale-105 transition-all duration-300 overflow-hidden relative"
+
+              className="backdrop-blur px-4 py-6 border-l border-r border-purple-500 overflow-hidden relative"
               onMouseEnter={() => setIsHovered(true)}
               onMouseLeave={() => setIsHovered(false)}
               style={{
-                boxShadow: '0 0 10px rgba(255, 0, 255, 0.8), 0 0 20px rgba(255, 0, 255, 0.6), 0 0 30px rgba(255, 0, 255, 0.4)',
-                animation: 'neonGlow 1.5s ease-in-out infinite alternate',
                 height: '300px',
               }}
           >
-            {loading ? (
+
+
+          {loading ? (
                 <div className="flex items-center justify-center py-6">
                   <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-purple-500"></div>
                   <span className="ml-3 text-gray-300">Fetching the future...</span>
@@ -144,8 +145,9 @@ export function Footer() {
             )}
           </div>
 
+
           <motion.p
-              className="mt-12 pt-8 border-t border-gray-800 text-gray-400 text-sm"
+              className="mt-12 pt-8 text-gray-400 text-sm"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               transition={{ delay: 0.3 }}
