@@ -319,7 +319,7 @@ export default function AuthPage() {
   }
 `}</style>
 
-              <div className="space-y-2"><h1 className="text-3xl font-bold tracking-tighter sm:text-5xl">
+              <div className="space-y-2"> <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl">
                 Join the <span className="gradient-text gradient-text-italic">Titan <span style={{ paddingRight: '4px' }}>AI</span></span> <span >Community</span>
               </h1>
                 <p className="max-w-[600px] text-gray-400 md:text-xl">
