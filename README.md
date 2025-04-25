@@ -21,7 +21,7 @@
 
 **Titan AI** is an open-source, browser-based development platform that brings together powerful AI models and full-stack execution in one seamless interface. Build, test, and deploy apps faster—with real-time collaboration, smart code generation, and zero local setup.
 
-🔗 **Live Platform**: [titan1.pages.dev](https://62966f99.titan-5cd.pages.dev/)  
+🔗 **Live Platform**: [titan1.pages.dev](https://titan-5cd.pages.dev/)  
 
 ---
 
