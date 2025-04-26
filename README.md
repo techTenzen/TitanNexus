@@ -11,7 +11,7 @@
     <a href="#contributing"><strong>Contributing</strong></a>
   </p>
   
-  <h3>✨ <a href="https://titan1.pages.dev">Try Titan AI Live!</a> ✨</h3>
+  <h3>✨ <a href="https://titanaicore.pages.dev/">Try Titan AI Live!</a> ✨</h3>
   <br>
 </div>
 
@@ -21,7 +21,7 @@
 
 **Titan AI** is an open-source, browser-based development platform that brings together powerful AI models and full-stack execution in one seamless interface. Build, test, and deploy apps faster—with real-time collaboration, smart code generation, and zero local setup.
 
-🔗 **Live Platform**: [titan1.pages.dev](https://titan-5cd.pages.dev/)  
+🔗 **Live Platform**: [titanaicore.pages.dev](https://titanaicore.pages.dev/)  
 
 ---
 
@@ -62,7 +62,7 @@ Work simultaneously with team members on shared projects, featuring integrated c
 ## 🔥 Live Demo
 
 Experience Titan AI yourself - no installation required:  
-👉 **[https://titan1.pages.dev](https://titan1.pages.dev)**  
+👉 **[https://titanaicore.pages.dev/](https://titanaicore.pages.dev/)**  
 
 <div align="center">
   <img src="https://example.com/titan-demo.gif" alt="Titan AI Demo" width="700">
@@ -90,7 +90,7 @@ Experience Titan AI yourself - no installation required:
 
 ```bash
 # Clone the repository
-git clone https://github.com/titan-ai/titan.git
+git clone https://github.com/techTenzen/TitanAiCore.git
 cd titan
 
 # Using npm
@@ -256,5 +256,5 @@ Titan AI is released under the MIT License.
 
 <div align="center">
   <strong>Built with ⚡ technical innovation and 🧠 collective intelligence by the Titan AI team and our vibrant open-source community</strong><br/>
-  <h3><a href="https://titan1.pages.dev">🌐 Experience Titan AI Today!</a></h3>
+  <h3><a href="https://titanaicore.pages.dev/">🌐 Experience Titan AI Today!</a></h3>
 </div>

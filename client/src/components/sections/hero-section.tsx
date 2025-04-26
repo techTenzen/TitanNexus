@@ -185,7 +185,7 @@ createReactComponent().then(code => {
                     <div className="inline-flex items-center justify-center px-4 py-1 mb-4 rounded-full text-sm font-medium text-[#6f3fc9] bg-[#f3e8ff] animate-fade-in">
                         <span className="mr-2 text-[#6f3fc9] text-base">●</span>
                         <a
-                            href="https://titan-5cd.pages.dev/"
+                            href="https://titanaicore.pages.dev/"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="hover:underline"
