@@ -90,13 +90,13 @@ export function Navbar() {
             return (
                 <div className="flex items-center space-x-4">
                     <Link href={`/profile/${currentUser.username}`}>
-                        <span className="flex items-center text-gray-300 hover:text-white transition-colors cursor-pointer">
+                        <span className="flex items-center text-white">
                             <User className="w-4 h-4 mr-2" />
                             {currentUser.username}
                         </span>
                     </Link>
                     <Button
-                        variant="outline"
+                        className="px-4 py-1 border rounded text-white border-white hover:bg-white hover:text-[#0b1020] transition"
                         onClick={handleDirectLogout}
                         disabled={isLoggingOut}
                     >
@@ -113,12 +113,12 @@ export function Navbar() {
             return (
                 <>
                     <Link href="/auth">
-                        <span className="text-sm font-medium hover:text-[#FF3370] transition-colors cursor-pointer">
+                        <span className="text-sm font-medium hover:text-[#FF3370] transition-colors cursor-pointer text-white">
                             Sign In
                         </span>
                     </Link>
                     <Link href="/auth">
-                        <span className="bg-background-secondary border border-[#7928CA] hover:bg-[#7928CA] transition-colors duration-300 rounded-lg px-4 py-2 text-sm font-medium cursor-pointer">
+                        <span className="px-4 py-1 border rounded text-white border-white hover:bg-white hover:text-[#0b1020] transition cursor-pointer ml-4">
                             Sign Up
                         </span>
                     </Link>
@@ -185,69 +185,73 @@ export function Navbar() {
     };
 
     return (
-        <nav className={cn(
-            "sticky top-0 z-50 transition-all duration-300 backdrop-blur-sm",
-            isScrolled ? "bg-black/50" : "bg-transparent"
-        )}>
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-                <div className="flex justify-between items-center">
-                    <div className="flex items-center">
-                        <Link href="/">
-                            <span className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#FF3370] to-[#7928CA] cursor-pointer">
-                                Titan AI
-                            </span>
-                        </Link>
+        <nav className="w-full bg-[#0b1020] h-16">
+            <div className="max-w-7xl mx-auto flex items-center justify-between px-6 h-16">
+                {/* Logo or Brand */}
+                <Link href="/">
+                    <span className="cursor-pointer flex items-center">
+                        <img
+                            src="/logo.png"
+                            alt="Titan AI"
+                            className="h-28 w-auto"
+                            draggable={false}
+                        />
+                        {/* If you want both logo and text, uncomment below */}
+                        {/* <span className="ml-2 font-bold text-2xl bg-clip-text text-transparent bg-gradient-to-r from-[#FF3370] to-[#7928CA]">Titan AI</span> */}
+                    </span>
+                </Link>
 
-                        {/* Always show public links */}
-                        <div className="hidden md:flex ml-10 space-x-8">
-                            {publicLinks.map((link) => (
-                                <Link key={link.href} href={link.href}>
-                                    <span className={cn(
-                                        "px-3 py-2 text-sm font-medium transition-colors relative cursor-pointer",
-                                        location === link.href
-                                            ? "text-white after:content-[''] after:absolute after:bottom-[-4px] after:left-0 after:w-full after:h-0.5 after:bg-gradient-to-r after:from-[#FF3370] after:to-[#7928CA]"
-                                            : "text-gray-300 hover:text-white"
-                                    )}>
-                                        {link.label}
-                                    </span>
-                                </Link>
-                            ))}
+                {/* Navigation Links */}
+                <ul className="hidden md:flex items-center space-x-8 ml-20">
+                    {publicLinks.map((link) => (
+                        <li key={link.href}>
+                            <Link href={link.href}>
+                                <span className={cn(
+                                    location === link.href
+                                        ? "font-semibold text-white border-b-2 border-[#FF3370] pb-1"
+                                        : "text-white hover:text-[#FF3370] transition-colors"
+                                )}>
+                                    {link.label}
+                                </span>
+                            </Link>
+                        </li>
+                    ))}
 
-                            {/* Only show authenticated links if user is logged in */}
-                            {currentUser && authenticatedLinks.map((link) => (
-                                <Link key={link.href} href={link.href}>
-                                    <span className={cn(
-                                        "px-3 py-2 text-sm font-medium transition-colors relative cursor-pointer",
-                                        location === link.href
-                                            ? "text-white after:content-[''] after:absolute after:bottom-[-4px] after:left-0 after:w-full after:h-0.5 after:bg-gradient-to-r after:from-[#FF3370] after:to-[#7928CA]"
-                                            : "text-gray-300 hover:text-white"
-                                    )}>
-                                        {link.label}
-                                    </span>
-                                </Link>
-                            ))}
-                        </div>
-                    </div>
+                    {/* Authenticated links */}
+                    {currentUser && authenticatedLinks.map((link) => (
+                        <li key={link.href}>
+                            <Link href={link.href}>
+                                <span className={cn(
+                                    location === link.href
+                                        ? "font-semibold text-white border-b-2 border-[#FF3370] pb-1"
+                                        : "text-white hover:text-[#FF3370] transition-colors"
+                                )}>
+                                    {link.label}
+                                </span>
+                            </Link>
+                        </li>
+                    ))}
+                </ul>
 
-                    <div className="hidden md:flex items-center space-x-4">
-                        {renderAuthControls()}
-                    </div>
+                {/* User Info and Actions */}
+                <div className="hidden md:flex items-center space-x-4">
+                    {renderAuthControls()}
+                </div>
 
-                    {/* Mobile menu button */}
-                    <div className="md:hidden">
-                        <button
-                            type="button"
-                            onClick={() => setIsOpen(!isOpen)}
-                            className="text-gray-300 hover:text-white focus:outline-none"
-                        >
-                            <span className="sr-only">Open main menu</span>
-                            {isOpen ? (
-                                <X className="h-6 w-6" />
-                            ) : (
-                                <Menu className="h-6 w-6" />
-                            )}
-                        </button>
-                    </div>
+                {/* Mobile menu button */}
+                <div className="md:hidden">
+                    <button
+                        type="button"
+                        onClick={() => setIsOpen(!isOpen)}
+                        className="text-gray-300 hover:text-white focus:outline-none"
+                    >
+                        <span className="sr-only">Open main menu</span>
+                        {isOpen ? (
+                            <X className="h-6 w-6" />
+                        ) : (
+                            <Menu className="h-6 w-6" />
+                        )}
+                    </button>
                 </div>
             </div>
 
