@@ -270,7 +270,6 @@ export default function AuthPage() {
             >
 
 
-              // Add this to your auth page component or in a separate CSS file
               <style jsx global>{`
   /* Gradient Text Animation Styles */
   @import url('https://fonts.googleapis.com/css2?family=Geist+Sans:wght@400;500;600;700&display=swap');
